@@ -428,7 +428,12 @@ int64 solveAFinal(Parameters& params, Solution* startSol)
 	    }
 
 		set<pair<int64,vector<int> > >::iterator it = costsAndAssignmentsPrevious.begin();
+		
+		// Enable tracking only for the accepted solution transition
+		sol->enableAcceptedTransitionTracking();
 		sol->setAssignments((*it).second);
+        sol->updateSolutionState();
+        sol->disableAcceptedTransitionTracking();
 
 		currentCost = solveWithChangingLoadCostWeightsA(sol, params, endPos, sol->getNumberOfProcesses() - 1);
 
@@ -461,31 +466,29 @@ int64 solveRangeB(Solution* sol, Parameters& params, int start_pos, int end_pos,
 {
 
 
-	 // bpr
-	 if(params.nmb_iters_bpr > 0)
-	 {
-		 for(int ii = 0; ii < 5; ii++)
+		 // bpr
+		 if(params.nmb_iters_bpr > 0)
 		 {
-			  double costBefore = sol->getCost();
-			  int64 startBPR = time(0);
+			 for(int ii = 0; ii < 5; ii++)
+			 {
+				  double costBefore = sol->getCost();
+				  int64 startBPR = time(0);
 
-			  if(!changedWeights)
-				  sol->updateBestCost();
+				  if(!changedWeights)
+					  sol->updateBestCost();
 
-			  if(time(0) - params.programStartTime > params.time_limit - 5) return sol->getCost();
+				  if(time(0) - params.programStartTime > params.time_limit - 5) return sol->getCost();
 
-			  BPR(sol, params, params.nmb_iters_bpr / 5);
+				  BPR(sol, params, params.nmb_iters_bpr / 5);
 
-			  if(!changedWeights)
-				  sol->updateBestCost();
+				  if(!changedWeights)
+					  sol->updateBestCost();
 
-			  if(((double) (costBefore - sol->getCost())) / costBefore < 0.005) break;
-			  if(time(0) - rangeStartTime > timeLimitForRange) break;
-			  if(time(0) - startBPR > 5 * params.time_limit / 300) break;
-		 }
-	 }
-
-	 // ls shift + swap
+				  if(((double) (costBefore - sol->getCost())) / costBefore < 0.005) break;
+				  if(time(0) - rangeStartTime > timeLimitForRange) break;
+				  if(time(0) - startBPR > 5 * params.time_limit / 300) break;
+			 }
+		 }	 // ls shift + swap
 	 if(time(0) - params.programStartTime > params.time_limit - 5) return sol->getCost();
 	 local_search_shift(sol, params, 1000000, 0, end_pos);
 

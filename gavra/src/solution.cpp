@@ -853,7 +853,7 @@ void Solution::initializeTracker(const string& filename) {
 	
 	tracking_file_ = new ofstream(filename.c_str());
 	if (tracking_file_->is_open()) {
-		tracking_enabled_ = true;
+		tracking_enabled_ = false; // Start with tracking disabled - will be enabled only for accepted transitions
 		move_counter_ = 0;
 		solution_id_ = 1;
 		start_timestamp_ = time(0) * 1000LL; // Convert to milliseconds
@@ -861,6 +861,9 @@ void Solution::initializeTracker(const string& filename) {
 		// Write CSV header
 		*tracking_file_ << "MoveNum,ProcessID,SourceMachine,DestMachine,OriginalMachine,Service,MoveCost,ProcessResourceRequirements,Improvement,Timestamp,SolutionId,SourceMachineResourceUsage,DestMachineResourceUsage,SourceMachineCapacities,DestMachineCapacities,SourceMachineTransientUsage,DestMachineTransientUsage,SourceMachineProcessCount,DestMachineProcessCount,LoadCost,BalanceCost,SolutionCost" << endl;
 		tracking_file_->flush();
+		
+		// Initialize first solution state
+		updateSolutionState();
 	}
 }
 
@@ -870,7 +873,7 @@ void Solution::trackProcessReassignment(Process* p, Machine* oldMachine, Machine
 	}
 	
 	move_counter_++;
-	solution_id_++;
+	// Don't increment solution_id here - only when updateSolutionState() is called
 	long long current_timestamp = time(0) * 1000LL;
 	
 	// Get process information
@@ -961,12 +964,26 @@ void Solution::trackProcessReassignment(Process* p, Machine* oldMachine, Machine
 	tracking_file_->flush();
 }
 
+void Solution::updateSolutionState() {
+	if (tracking_enabled_) {
+		solution_id_++;
+	}
+}
+
 void Solution::closeTracker() {
 	if (tracking_file_) {
 		tracking_file_->close();
 		delete tracking_file_;
 		tracking_file_ = 0;
 	}
+	tracking_enabled_ = false;
+}
+
+void Solution::enableAcceptedTransitionTracking() {
+	tracking_enabled_ = true;
+}
+
+void Solution::disableAcceptedTransitionTracking() {
 	tracking_enabled_ = false;
 }
 

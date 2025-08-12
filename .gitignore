@@ -1,3 +1,5 @@
 *.csv
 *.pyc
+*.o
+
 jask/build/

@@ -53,7 +53,7 @@ class ReassignmentsDataset:
     solution_cost            : np.ndarray  # Solution Cost
 
     def __init__(self, dataset_fraction: float = 1.0):
-        raw_reassignments_dataset_path = "/home/pbiel/repos/jask/analytics/a12_new/process_reassignments.csv"
+        raw_reassignments_dataset_path = "/home/pbiel/repos/mrp/analysis/datasets/jask_a12/sol_partial.csv"
         df = pd.read_csv(raw_reassignments_dataset_path)
         print(f"Loading {len(df)} entries frm dataset: {raw_reassignments_dataset_path}.")
 
@@ -94,6 +94,16 @@ class ReassignmentsDataset:
 
         print("Completed loading dataset.")
 
+    def __parse_raw_list_of_values(self, ls) -> np.ndarray:
+        try:              return np.array(ast.literal_eval(ls), dtype=int)
+        except Exception: return np.zeros(len(ls), dtype=int)
+    
+    def __sum_matrix(self, df, axis=1) -> np.ndarray:
+        df_parsed = df.apply(self.__parse_raw_list_of_values)
+        np_mtx = np.stack(df_parsed.values)
+        np_arr = np.sum(np_mtx, axis=axis) # Sum each row, e.g. total requirements per process
+        return np_arr
+    
     def transition_statistics(self):
         solution_states = self.solution_state_change_points()
         transitions_reassignments_counts = self.transitions_reassignments_count()
@@ -202,16 +212,6 @@ class ReassignmentsDataset:
                     print(f"Machine: {machine_id}, Usage: {machine_usages[i]}")
 
             return machine_usages
-
-    def __parse_raw_list_of_values(self, ls) -> np.ndarray:
-        try:              return np.array(ast.literal_eval(ls), dtype=int)
-        except Exception: return np.zeros(len(ls), dtype=int)
-    
-    def __sum_matrix(self, df, axis=1) -> np.ndarray:
-        df_parsed = df.apply(self.__parse_raw_list_of_values)
-        np_mtx = np.stack(df_parsed.values)
-        np_arr = np.sum(np_mtx, axis=axis) # Sum each row, e.g. total requirements per process
-        return np_arr
 
     def metadata(self):
         print(">>> Basic Metadata >>>")

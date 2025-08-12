@@ -13,6 +13,10 @@ def plot_on_ax(ax, x, y, z, ttl, xlbl, ylbl, zlbl, kwargs, zones, fticks, vlines
 
     # >>>>> Set plot metadata and options >>>>>
 
+    if 'xscale' in kwargs:
+        xscaling = kwargs.pop('xscale')
+        ax.set_xscale(xscaling)
+
     if 'yscale' in kwargs:
         yscaling = kwargs.pop('yscale')
         ax.set_yscale(yscaling)
@@ -49,12 +53,15 @@ def plot_on_ax(ax, x, y, z, ttl, xlbl, ylbl, zlbl, kwargs, zones, fticks, vlines
     if z is None: # >>>>> Handle Use Case - 1D array >>>>>
 
         fill_between = kwargs.pop('fill', False) if kwargs else False
-        ptype = kwargs.pop('ptype', 'line') if kwargs else 'line'
         if fill_between: ax.fill_between(x, y, color='skyblue', alpha=0.5)
+
+        ptype = kwargs.pop('ptype', 'line') if kwargs else 'line'
+
         plot_defaults = {}
         if kwargs is not None: plot_defaults.update(kwargs)
+
         if ptype == 'scatter': ax.scatter(x, y, **plot_defaults)
-        elif ptype == 'hist': ax.hist(y, bins=x, density=True, **plot_defaults)
+        elif ptype == 'hist': ax.hist(y, bins=x, **plot_defaults)
         else: ax.plot(x, y, **plot_defaults)
         if 'label' in plot_defaults: ax.legend(loc='upper right')
 

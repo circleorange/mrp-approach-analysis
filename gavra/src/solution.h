@@ -58,7 +58,12 @@ class Solution {
      // tracking methods
      void initializeTracker(const string& filename);
      void trackProcessReassignment(Process* p, Machine* oldMachine, Machine* newMachine, int64 costImprovement);
+     void updateSolutionState(); // Add method to explicitly update solution state
      void closeTracker();
+     
+     // tracking control methods for accepted solution transitions
+     void enableAcceptedTransitionTracking();
+     void disableAcceptedTransitionTracking();
      
      // used when changing load weights
      void calculateLoadCost();
