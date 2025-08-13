@@ -1,14 +1,9 @@
 {
 	"folders": [
-        {
-            "path": "gavra"
-        },
-        {
-            "path": "jask"
-        },
-        {
-            "path": "analysis"
-        }
+        { "path": "gavra" },
+        { "path": "jask" },
+        { "path": "mehta" },
+        { "path": "analysis" },
     ],
     "settings": {}
 }

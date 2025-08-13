@@ -1,0 +1,40 @@
+{
+    "files.associations": {
+        "*.h": "cpp",
+        "*.cpp": "cpp",
+        "*.conf": "properties"
+    },
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/gavra/src"
+    ],
+    "C_Cpp.default.compilerPath": "/usr/bin/g++",
+    "C_Cpp.default.cStandard": "c11",
+    "C_Cpp.default.cppStandard": "c++11",
+    "java.project.sourcePaths": [
+        "${workspaceFolder}/jask/src"
+    ],
+    "java.project.outputPath": "${workspaceFolder}/jask/build/classes",
+    "java.project.referencedLibraries": [
+        "${workspaceFolder}/jask/lib/**/*.jar"
+    ],
+    "python.defaultInterpreterPath": "/usr/bin/python3",
+    "jupyter.notebookFileRoot": "${workspaceFolder}/analysis",
+    "terminal.integrated.cwd": "${workspaceFolder}",
+    "files.exclude": {
+        "**/build/": true,
+        "**/Releasegcc/*.o": true,
+        "**/Releasegcc/*.d": true,
+        "**/.git": false,
+        "**/results_*": false
+    },
+    "search.exclude": {
+        "**/build/": true,
+        "**/Releasegcc/*.o": true,
+        "**/Releasegcc/*.d": true
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "*.cpp": "${capture}.h",
+        "*.java": "${capture}.class"
+    }
+}

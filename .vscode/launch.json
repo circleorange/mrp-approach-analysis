@@ -1,0 +1,54 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "GAVRA: Debug S41 Algorithm",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/gavra/Releasegcc/machineReassignment",
+            "args": [
+                "-p", "${workspaceFolder}/jask/data/A/model_a1_2.txt",
+                "-i", "${workspaceFolder}/jask/data/A/assignment_a1_2.txt",
+                "-o", "debug_output.txt",
+                "-t", "30",
+                "-s", "12345"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/gavra/Releasegcc",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "GAVRA: Build S41 Algorithm"
+        },
+        {
+            "name": "JASK: Debug J12 Algorithm",
+            "type": "java",
+            "request": "launch",
+            "mainClass": "put.roadef.Main",
+            "projectName": "roadef",
+            "cwd": "${workspaceFolder}/jask",
+            "args": [
+                "-conf", "conf/hc_lnshc.conf",
+                "-p", "data/A/model_a1_2.txt",
+                "-i", "data/A/assignment_a1_2.txt",
+                "-o", "debug_assignment_a1_2.txt",
+                "-t", "60"
+            ],
+            "vmArgs": [
+                "-Djava.library.path=/opt/ibm/ILOG/CPLEX_Studio2211/cplex/bin/x86-64_linux"
+            ],
+            "env": {
+                "LD_LIBRARY_PATH": "/opt/ibm/ILOG/CPLEX_Studio2211/cplex/bin/x86-64_linux:${env:LD_LIBRARY_PATH}"
+            },
+            "console": "integratedTerminal",
+            "preLaunchTask": "JASK: Build JAR"
+        }
+    ]
+}

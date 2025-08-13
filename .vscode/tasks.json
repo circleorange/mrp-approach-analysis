@@ -1,0 +1,428 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "GAVRA: Build S41 Algorithm",
+            "type": "shell",
+            "command": "make",
+            "args": ["clean", "&&", "make"],
+            "options": {
+                "cwd": "${workspaceFolder}/gavra/Releasegcc"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "group": "gavra"
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Build the C++ S41 algorithm with tracking capabilities"
+        },
+        {
+            "label": "GAVRA: Quick Test Run",
+            "type": "shell",
+            "command": "./machineReassignment",
+            "args": [
+                "-p", "${workspaceFolder}/jask/data/A/model_a1_1.txt",
+                "-i", "${workspaceFolder}/jask/data/A/assignment_a1_1.txt",
+                "-o", "test_output.txt",
+                "-t", "10",
+                "-s", "12345"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/gavra/Releasegcc"
+            },
+            "group": "test",
+            "dependsOn": "GAVRA: Build S41 Algorithm",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "group": "gavra"
+            },
+            "problemMatcher": [],
+            "detail": "Run S41 algorithm with a quick 10-second test"
+        },
+        {
+            "label": "GAVRA: Analysis Run (a1_2, 60s)",
+            "type": "shell",
+            "command": "./run_analysis.sh",
+            "args": ["a1_2", "60", "789"],
+            "options": {
+                "cwd": "${workspaceFolder}/gavra"
+            },
+            "group": "test",
+            "dependsOn": "GAVRA: Build S41 Algorithm",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "group": "gavra"
+            },
+            "problemMatcher": [],
+            "detail": "Run S41 algorithm analysis on dataset a1_2 for 60 seconds"
+        },
+        {
+            "label": "GAVRA: Full Analysis Run (a1_4, 300s)",
+            "type": "shell",
+            "command": "./run_analysis.sh",
+            "args": ["a1_4", "300", "42"],
+            "options": {
+                "cwd": "${workspaceFolder}/gavra"
+            },
+            "group": "test",
+            "dependsOn": "GAVRA: Build S41 Algorithm",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "group": "gavra"
+            },
+            "problemMatcher": [],
+            "detail": "Run S41 algorithm analysis on dataset a1_4 for 5 minutes"
+        },
+        {
+            "label": "JASK: Build JAR",
+            "type": "shell",
+            "command": "ant",
+            "args": ["jar"],
+            "options": {
+                "cwd": "${workspaceFolder}/jask"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "group": "jask"
+            },
+            "problemMatcher": [],
+            "detail": "Build the Java J12 algorithm JAR file"
+        },
+        {
+            "label": "JASK: Compile Only",
+            "type": "shell",
+            "command": "ant",
+            "args": ["compile"],
+            "options": {
+                "cwd": "${workspaceFolder}/jask"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "group": "jask"
+            },
+            "problemMatcher": [],
+            "detail": "Compile Java sources without creating JAR"
+        },
+        {
+            "label": "JASK: Full Analysis Run (a1_4, 300s)",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "-Djava.library.path=/opt/ibm/ILOG/CPLEX_Studio2211/cplex/bin/x86-64_linux",
+                "-jar",
+                "build/jar/roadef.jar",
+                "-conf",
+                "conf/hc_lnshc.conf",
+                "-p",
+                "data/A/model_a1_4.txt",
+                "-i",
+                "data/A/assignment_a1_4.txt",
+                "-o",
+                "new_assignment_a1_4.txt",
+                "-t",
+                "300"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/jask",
+                "env": {
+                    "LD_LIBRARY_PATH": "/opt/ibm/ILOG/CPLEX_Studio2211/cplex/bin/x86-64_linux:${env:LD_LIBRARY_PATH}"
+                }
+            },
+            "group": "test",
+            "dependsOn": "JASK: Build JAR",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "group": "jask"
+            },
+            "problemMatcher": [],
+            "detail": "Run J12 algorithm with CPLEX solver (5 minutes)"
+        },
+        {
+            "label": "JASK: Quick Test Run",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "-Djava.library.path=/opt/ibm/ILOG/CPLEX_Studio2211/cplex/bin/x86-64_linux",
+                "-jar",
+                "build/jar/roadef.jar",
+                "-conf",
+                "conf/hc_lnshc.conf",
+                "-p",
+                "data/A/model_a1_1.txt",
+                "-i",
+                "data/A/assignment_a1_1.txt",
+                "-o",
+                "test_assignment_a1_1.txt",
+                "-t",
+                "30"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/jask",
+                "env": {
+                    "LD_LIBRARY_PATH": "/opt/ibm/ILOG/CPLEX_Studio2211/cplex/bin/x86-64_linux:${env:LD_LIBRARY_PATH}"
+                }
+            },
+            "group": "test",
+            "dependsOn": "JASK: Build JAR",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "group": "jask"
+            },
+            "problemMatcher": [],
+            "detail": "Run J12 algorithm with quick 30-second test"
+        },
+        {
+            "label": "JASK: Clean Build",
+            "type": "shell",
+            "command": "ant",
+            "args": ["clean"],
+            "options": {
+                "cwd": "${workspaceFolder}/jask"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "group": "jask"
+            },
+            "problemMatcher": [],
+            "detail": "Clean Java build directory"
+        },
+        {
+            "label": "Compare Algorithms (Both Quick Run)",
+            "type": "shell",
+            "command": "echo",
+            "args": ["Starting comparison between GAVRA S41 and JASK J12 algorithms..."],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "test",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "GAVRA: Quick Test Run",
+                "JASK: Quick Test Run"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "group": "comparison"
+            },
+            "problemMatcher": [],
+            "detail": "Run both algorithms sequentially for comparison"
+        },
+        {
+            "label": "Analysis: Open Jupyter Notebook",
+            "type": "shell",
+            "command": "jupyter",
+            "args": ["notebook", "analysis.ipynb"],
+            "options": {
+                "cwd": "${workspaceFolder}/analysis"
+            },
+            "group": "test",
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "group": "analysis"
+            },
+            "problemMatcher": [],
+            "detail": "Open Jupyter notebook for algorithm analysis"
+        },
+        {
+            "label": "Analysis: Python Quick Analysis",
+            "type": "shell",
+            "command": "python3",
+            "args": ["quick_analysis.py"],
+            "options": {
+                "cwd": "${workspaceFolder}/gavra"
+            },
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "group": "analysis"
+            },
+            "problemMatcher": [],
+            "detail": "Run quick Python analysis on latest GAVRA results"
+        },
+        {
+            "label": "Analysis: Compare Tracking Files",
+            "type": "shell",
+            "command": "python3",
+            "args": ["compare_tracking.py"],
+            "options": {
+                "cwd": "${workspaceFolder}/gavra"
+            },
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "group": "analysis"
+            },
+            "problemMatcher": [],
+            "detail": "Compare tracking patterns between GAVRA dual solutions"
+        },
+        {
+            "label": "MEHTA: Build CB-LNS Algorithm",
+            "type": "shell",
+            "command": "make",
+            "args": ["clean", "&&", "make", "roadef"],
+            "options": {
+                "cwd": "${workspaceFolder}/mehta/cblns"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "group": "mehta"
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Build the C++ CB-LNS algorithm with accepted-solution tracking"
+        },
+        {
+            "label": "MEHTA: Quick Test Run",
+            "type": "shell",
+            "command": "./machineReassignment",
+            "args": [
+                "-p", "${workspaceFolder}/jask/data/A/model_a1_1.txt",
+                "-i", "${workspaceFolder}/jask/data/A/assignment_a1_1.txt",
+                "-t", "10"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/mehta/cblns"
+            },
+            "group": "test",
+            "dependsOn": "MEHTA: Build CB-LNS Algorithm",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "group": "mehta"
+            },
+            "problemMatcher": [],
+            "detail": "Run CB-LNS algorithm with a quick 10-second test"
+        },
+        {
+            "label": "MEHTA: Analysis Run (a1_2, 60s)",
+            "type": "shell",
+            "command": "./machineReassignment",
+            "args": [
+                "-p", "${workspaceFolder}/jask/data/A/model_a1_2.txt",
+                "-i", "${workspaceFolder}/jask/data/A/assignment_a1_2.txt",
+                "-t", "60"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/mehta/cblns"
+            },
+            "group": "test",
+            "dependsOn": "MEHTA: Build CB-LNS Algorithm",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "group": "mehta"
+            },
+            "problemMatcher": [],
+            "detail": "Run CB-LNS algorithm analysis on dataset a1_2 for 60 seconds"
+        },
+        {
+            "label": "MEHTA: Full Analysis Run (a1_4, 300s)",
+            "type": "shell",
+            "command": "./machineReassignment",
+            "args": [
+                "-p", "${workspaceFolder}/jask/data/A/model_a1_4.txt",
+                "-i", "${workspaceFolder}/jask/data/A/assignment_a1_4.txt",
+                "-t", "300"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/mehta/cblns"
+            },
+            "group": "test",
+            "dependsOn": "MEHTA: Build CB-LNS Algorithm",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "group": "mehta"
+            },
+            "problemMatcher": [],
+            "detail": "Run CB-LNS algorithm analysis on dataset a1_4 for 5 minutes"
+        },
+        {
+            "label": "Compare All Algorithms (Quick Run)",
+            "type": "shell",
+            "command": "echo",
+            "args": ["Starting comparison between GAVRA S41, JASK J12, and MEHTA CB-LNS algorithms..."],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "test",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "GAVRA: Quick Test Run",
+                "JASK: Quick Test Run",
+                "MEHTA: Quick Test Run"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "group": "comparison"
+            },
+            "problemMatcher": [],
+            "detail": "Run all three algorithms sequentially for comparison"
+        }
+    ]
+}
