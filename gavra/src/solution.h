@@ -48,22 +48,29 @@ class Solution {
     int64   machine_move_cost_;
 
     // tracking variables
-    ofstream* tracking_file_;
-    int move_counter_;
+    ofstream* accepted_tracking_file_;  // For accepted reassignments only
+    ofstream* exploration_tracking_file_;  // For all reassignments including exploration
+    int accepted_move_counter_;
+    int exploration_move_counter_;
     long long solution_id_;
     long long start_timestamp_;
     bool tracking_enabled_;
+    bool exploration_tracking_enabled_;
 
   public:
      // tracking methods
-     void initializeTracker(const string& filename);
+     void initializeTracker(const string& accepted_filename, const string& exploration_filename = "");
      void trackProcessReassignment(Process* p, Machine* oldMachine, Machine* newMachine, int64 costImprovement);
+     void trackExplorationMove(Process* p, Machine* oldMachine, Machine* newMachine, int64 costImprovement);
+     void writeTrackingData(ofstream* file, int& counter, Process* p, Machine* oldMachine, Machine* newMachine, int64 costImprovement);
      void updateSolutionState(); // Add method to explicitly update solution state
      void closeTracker();
      
      // tracking control methods for accepted solution transitions
      void enableAcceptedTransitionTracking();
      void disableAcceptedTransitionTracking();
+     void enableExplorationTracking();
+     void disableExplorationTracking();
      
      // used when changing load weights
      void calculateLoadCost();

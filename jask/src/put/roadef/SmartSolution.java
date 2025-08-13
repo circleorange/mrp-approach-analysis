@@ -32,10 +32,14 @@ public class SmartSolution extends AbstractSolution
 {
 	// Static tracking fields
 	private static PrintWriter reassignmentTracker = null;
+	private static PrintWriter acceptedReassignmentTracker = null;
 	private static PrintWriter solutionTracker = null;
 	private static long moveCounter = 0;
+	private static long acceptedMoveCounter = 0;
 	private static long solutionCounter = 0;
 	private static long currentSolutionId = 0;
+	private static long acceptedSolutionId = 1;  // Separate ID for accepted reassignments
+	private static long lastAcceptedCost = Long.MAX_VALUE;  // Track when solution actually improves
 	private static final Object trackingLock = new Object();
 	
 	private long machineMoveCostNotWeighted;
@@ -1025,6 +1029,109 @@ public class SmartSolution extends AbstractSolution
 		}
 	}
 	
+	// New method to track only accepted reassignments
+	public static void trackAcceptedReassignment(int processId, int sourceMachine, int destinationMachine, 
+													SmartSolution solution) {
+		if (acceptedReassignmentTracker == null) {
+			initializeAcceptedTracker("accepted_reassignments.csv");
+		}
+
+		synchronized (trackingLock) {
+			if (acceptedReassignmentTracker == null) return;
+			
+			Process process = solution.problem.getProcess(processId);
+			int originalMachine = solution.problem.getOriginalSolution().getMachine(processId);
+			double improvement = solution.getImprovement();
+			StringBuilder reqBuilder = new StringBuilder();
+			
+			// Check if this is a new solution state (improved cost)
+			long currentCost = solution.getCost();
+			if (currentCost < lastAcceptedCost) {
+				acceptedSolutionId++;  // Increment only when solution actually improves
+				lastAcceptedCost = currentCost;
+			}
+			
+			reqBuilder.append("[");
+			for (int i = 0; i < process.requirements.length; i++) {
+				if (i > 0) reqBuilder.append(",");
+				reqBuilder.append(process.requirements[i]);
+			}
+			reqBuilder.append("]");
+			
+			// Collect machine resource usage data
+			StringBuilder srcUsageBuilder = new StringBuilder();
+			StringBuilder destUsageBuilder = new StringBuilder();
+			StringBuilder srcCapacityBuilder = new StringBuilder();
+			StringBuilder destCapacityBuilder = new StringBuilder();
+			StringBuilder srcTransientBuilder = new StringBuilder();
+			StringBuilder destTransientBuilder = new StringBuilder();
+			
+			srcUsageBuilder.append("[");
+			destUsageBuilder.append("[");
+			srcCapacityBuilder.append("[");
+			destCapacityBuilder.append("[");
+			srcTransientBuilder.append("[");
+			destTransientBuilder.append("[");
+			
+			for (int r = 0; r < solution.problem.getNumResources(); r++) {
+				if (r > 0) {
+					srcUsageBuilder.append(",");
+					destUsageBuilder.append(",");
+					srcCapacityBuilder.append(",");
+					destCapacityBuilder.append(",");
+					srcTransientBuilder.append(",");
+					destTransientBuilder.append(",");
+				}
+				
+				srcUsageBuilder.append(solution.getResourceUsage(sourceMachine, r));
+				destUsageBuilder.append(solution.getResourceUsage(destinationMachine, r));
+				srcCapacityBuilder.append(solution.problem.getMachine(sourceMachine).capacities[r]);
+				destCapacityBuilder.append(solution.problem.getMachine(destinationMachine).capacities[r]);
+				srcTransientBuilder.append(solution.getTransientUsage(sourceMachine, r));
+				destTransientBuilder.append(solution.getTransientUsage(destinationMachine, r));
+			}
+			
+			srcUsageBuilder.append("]");
+			destUsageBuilder.append("]");
+			srcCapacityBuilder.append("]");
+			destCapacityBuilder.append("]");
+			srcTransientBuilder.append("]");
+			destTransientBuilder.append("]");
+			
+			int srcProcessCount = solution.processesInMachine[sourceMachine].size();
+			int destProcessCount = solution.processesInMachine[destinationMachine].size();
+			
+			long loadCost = solution.getLoadCost();
+			long balanceCost = solution.getBalanceCost();
+			long solutionCost = solution.getCost();
+			
+			acceptedReassignmentTracker.printf("%d,%d,%d,%d,%d,%d,%d,\"%s\",%.4f,%d,%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%d,%d,%d,%d,%d%n",
+					++acceptedMoveCounter,
+					processId,
+					sourceMachine,
+					destinationMachine,
+					originalMachine,
+					process.service,
+					process.moveCost,
+					reqBuilder.toString(),
+					improvement,
+					System.currentTimeMillis(),
+					acceptedSolutionId,  // Use separate solution ID for accepted reassignments
+					srcUsageBuilder.toString(),
+					destUsageBuilder.toString(),
+					srcCapacityBuilder.toString(),
+					destCapacityBuilder.toString(),
+					srcTransientBuilder.toString(),
+					destTransientBuilder.toString(),
+					srcProcessCount,
+					destProcessCount,
+					loadCost,
+					balanceCost,
+					solutionCost);
+			acceptedReassignmentTracker.flush();
+		}
+	}
+	
 	public static void closeTracker() 
 	{
 		synchronized (trackingLock) {
@@ -1032,12 +1139,36 @@ public class SmartSolution extends AbstractSolution
 				reassignmentTracker.close();
 				reassignmentTracker = null;
 			}
+			if (acceptedReassignmentTracker != null) {
+				acceptedReassignmentTracker.close();
+				acceptedReassignmentTracker = null;
+			}
 			if (solutionTracker != null) {
 				solutionTracker.close();
 				solutionTracker = null;
 			}
 			// Close machine metrics tracker
 			MachineMetricsTracker.closeMachineTracker();
+		}
+	}
+
+	private static void initializeAcceptedTracker(String filename) 
+	{
+		synchronized (trackingLock) {
+			if (acceptedReassignmentTracker == null) {
+				try {
+					acceptedReassignmentTracker = new PrintWriter(new FileWriter(filename, false));
+					acceptedReassignmentTracker.println("MoveNum,ProcessID,SourceMachine,DestMachine,OriginalMachine,Service,MoveCost," +
+						"ProcessResourceRequirements,Improvement,Timestamp,SolutionId," +
+						"SourceMachineResourceUsage,DestMachineResourceUsage,SourceMachineCapacities,DestMachineCapacities," +
+						"SourceMachineTransientUsage,DestMachineTransientUsage,SourceMachineProcessCount,DestMachineProcessCount," +
+						"LoadCost,BalanceCost,SolutionCost");
+					acceptedReassignmentTracker.flush();
+				} 
+				catch (IOException e) {
+					System.err.println("Error creating accepted reassignment tracker: " + e.getMessage());
+				}
+			}
 		}
 	}
 

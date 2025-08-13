@@ -134,6 +134,8 @@ public class AllProcessesNeighborhood2 implements Neighborhood<Solution>, Setup 
 					machinesWorthTrying.put(sourceMachine, p);
 					machinesWorthTrying.put(bestMachine, p);
 					
+					// Track this as an accepted reassignment
+					SmartSolution.trackAcceptedReassignment(p, sourceMachine, bestMachine, ss);
 					
 					double impr = solution.getImprovement();
 					double imprDiff = impr - lastImpr;

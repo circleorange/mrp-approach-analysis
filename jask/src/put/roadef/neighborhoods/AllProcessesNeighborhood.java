@@ -129,6 +129,10 @@ public class AllProcessesNeighborhood implements Neighborhood<Solution>, Setup {
 			// If we did not change anything, then this is not a proper neighbor, so we will not provide to the algorithm (decision) 
 			if (bestMachine != sourceMachine) {
 				Decision decision = processor.processNeighbor(solution);
+				// If accepted, track this as an accepted reassignment
+				if (decision == Decision.Accept) {
+					SmartSolution.trackAcceptedReassignment(p, sourceMachine, bestMachine, ss);
+				}
 				// If not accepted then move process to the source machine
 				if (decision != Decision.Accept) // Reject or Stop. (On Stop we don't want to accept (possibly worst solution)
 					solution.moveProcess(p, sourceMachine);

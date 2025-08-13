@@ -346,7 +346,8 @@ int64 solveAFinal(Parameters& params, Solution* startSol)
 					params.new_assignment_filename, sol );
   //*************************************************************************
 
-
+	// Enable exploration tracking for the entire solving process
+	sol->enableExplorationTracking();
 
 	vector<int> startAssignments = sol->getAssignmentsVectorCopy();
 
@@ -450,6 +451,9 @@ int64 solveAFinal(Parameters& params, Solution* startSol)
 		if(time(0) - startTime > params.time_limit) break;
 
 	}
+
+	// Disable exploration tracking at the end
+	sol->disableExplorationTracking();
 
 	return BEST;
 

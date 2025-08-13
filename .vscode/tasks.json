@@ -28,8 +28,8 @@
             "type": "shell",
             "command": "./machineReassignment",
             "args": [
-                "-p", "${workspaceFolder}/jask/data/A/model_a1_1.txt",
-                "-i", "${workspaceFolder}/jask/data/A/assignment_a1_1.txt",
+                "-p", "${workspaceFolder}/jask/data/A/model_a1_4.txt",
+                "-i", "${workspaceFolder}/jask/data/A/assignment_a1_4.txt",
                 "-o", "test_output.txt",
                 "-t", "10",
                 "-s", "12345"

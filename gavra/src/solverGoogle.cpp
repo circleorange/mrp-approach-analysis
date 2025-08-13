@@ -49,9 +49,9 @@ int main(int argc, char **argv)
 	  Solution* sol2 = constructSolution(params2);
 	  preprocesData(sol2);
 	  
-	  // Initialize tracking for both solutions
-	  sol->initializeTracker("process_reassignments_sol1.csv");
-	  sol2->initializeTracker("process_reassignments_sol2.csv");
+	  // Initialize tracking for both solutions with dual tracking
+	  sol->initializeTracker("accepted_reassignments_sol1.csv", "process_reassignments_sol1.csv");
+	  sol2->initializeTracker("accepted_reassignments_sol2.csv", "process_reassignments_sol2.csv");
 	 //*********************************************************************************************
 
 

@@ -12,11 +12,14 @@ Solution::Solution() :
 	    balance_cost_(0),
 	    process_move_cost_(0),
 	    machine_move_cost_(0),
-	    tracking_file_(0),
-	    move_counter_(0),
+	    accepted_tracking_file_(0),
+	    exploration_tracking_file_(0),
+	    accepted_move_counter_(0),
+	    exploration_move_counter_(0),
 	    solution_id_(1),
 	    start_timestamp_(0),
 	    tracking_enabled_(false),
+	    exploration_tracking_enabled_(false),
 	    best_cost_(100000000000000) {}
 
 
@@ -270,9 +273,16 @@ void Solution::reassignProcess(Process* p, Machine* m){
     //*************************************************************************
 
     // Track the reassignment if tracking is enabled
+    int64 costImprovement = 0; // We could calculate actual improvement here if needed
+    
+    // Track in accepted file if enabled (for accepted solution transitions)
     if (tracking_enabled_) {
-        int64 costImprovement = 0; // We could calculate actual improvement here if needed
         trackProcessReassignment(p, oldMachine, m, costImprovement);
+    }
+    
+    // Track in exploration file if enabled (for global reassignment tracking)
+    if (exploration_tracking_enabled_) {
+        trackExplorationMove(p, oldMachine, m, costImprovement);
     }
 
 }
@@ -846,34 +856,63 @@ void Solution::sortProcessesByPosition()
 }
 
 // Tracking implementation
-void Solution::initializeTracker(const string& filename) {
-	if (tracking_file_) {
+void Solution::initializeTracker(const string& accepted_filename, const string& exploration_filename) {
+	if (accepted_tracking_file_ || exploration_tracking_file_) {
 		closeTracker();
 	}
 	
-	tracking_file_ = new ofstream(filename.c_str());
-	if (tracking_file_->is_open()) {
+	// Initialize accepted tracking file
+	accepted_tracking_file_ = new ofstream(accepted_filename.c_str());
+	if (accepted_tracking_file_->is_open()) {
 		tracking_enabled_ = false; // Start with tracking disabled - will be enabled only for accepted transitions
-		move_counter_ = 0;
+		accepted_move_counter_ = 0;
 		solution_id_ = 1;
 		start_timestamp_ = time(0) * 1000LL; // Convert to milliseconds
 		
-		// Write CSV header
-		*tracking_file_ << "MoveNum,ProcessID,SourceMachine,DestMachine,OriginalMachine,Service,MoveCost,ProcessResourceRequirements,Improvement,Timestamp,SolutionId,SourceMachineResourceUsage,DestMachineResourceUsage,SourceMachineCapacities,DestMachineCapacities,SourceMachineTransientUsage,DestMachineTransientUsage,SourceMachineProcessCount,DestMachineProcessCount,LoadCost,BalanceCost,SolutionCost" << endl;
-		tracking_file_->flush();
-		
-		// Initialize first solution state
-		updateSolutionState();
+		// Write CSV header for accepted tracking
+		*accepted_tracking_file_ << "MoveNum,ProcessID,SourceMachine,DestMachine,OriginalMachine,Service,MoveCost,ProcessResourceRequirements,Improvement,Timestamp,SolutionId,SourceMachineResourceUsage,DestMachineResourceUsage,SourceMachineCapacities,DestMachineCapacities,SourceMachineTransientUsage,DestMachineTransientUsage,SourceMachineProcessCount,DestMachineProcessCount,LoadCost,BalanceCost,SolutionCost" << endl;
+		accepted_tracking_file_->flush();
 	}
+	
+	// Initialize exploration tracking file (global reassignments)
+	if (!exploration_filename.empty()) {
+		exploration_tracking_file_ = new ofstream(exploration_filename.c_str());
+		if (exploration_tracking_file_->is_open()) {
+			exploration_tracking_enabled_ = true; // Enable global tracking by default
+			exploration_move_counter_ = 0;
+			
+			// Write CSV header for exploration tracking
+			*exploration_tracking_file_ << "MoveNum,ProcessID,SourceMachine,DestMachine,OriginalMachine,Service,MoveCost,ProcessResourceRequirements,Improvement,Timestamp,SolutionId,SourceMachineResourceUsage,DestMachineResourceUsage,SourceMachineCapacities,DestMachineCapacities,SourceMachineTransientUsage,DestMachineTransientUsage,SourceMachineProcessCount,DestMachineProcessCount,LoadCost,BalanceCost,SolutionCost" << endl;
+			exploration_tracking_file_->flush();
+		}
+	}
+	
+	// Initialize first solution state
+	updateSolutionState();
 }
 
 void Solution::trackProcessReassignment(Process* p, Machine* oldMachine, Machine* newMachine, int64 costImprovement) {
-	if (!tracking_enabled_ || !tracking_file_ || !tracking_file_->is_open()) {
+	// Track in accepted file only if enabled
+	if (tracking_enabled_ && accepted_tracking_file_ && accepted_tracking_file_->is_open()) {
+		writeTrackingData(accepted_tracking_file_, accepted_move_counter_, p, oldMachine, newMachine, costImprovement);
+		accepted_tracking_file_->flush();
+	}
+}
+
+void Solution::trackExplorationMove(Process* p, Machine* oldMachine, Machine* newMachine, int64 costImprovement) {
+	// Track in exploration file (global tracking) if enabled
+	if (exploration_tracking_enabled_ && exploration_tracking_file_ && exploration_tracking_file_->is_open()) {
+		writeTrackingData(exploration_tracking_file_, exploration_move_counter_, p, oldMachine, newMachine, costImprovement);
+		exploration_tracking_file_->flush();
+	}
+}
+
+void Solution::writeTrackingData(ofstream* file, int& counter, Process* p, Machine* oldMachine, Machine* newMachine, int64 costImprovement) {
+	if (!file || !file->is_open()) {
 		return;
 	}
 	
-	move_counter_++;
-	// Don't increment solution_id here - only when updateSolutionState() is called
+	counter++;
 	long long current_timestamp = time(0) * 1000LL;
 	
 	// Get process information
@@ -885,83 +924,81 @@ void Solution::trackProcessReassignment(Process* p, Machine* oldMachine, Machine
 	int64 moveCost = p->getMoveCost();
 	
 	// Process resource requirements
-	*tracking_file_ << move_counter_ << "," << processId << "," << sourceM << "," << destM << "," << originalM << "," << serviceId << "," << moveCost << ",\"[";
+	*file << counter << "," << processId << "," << sourceM << "," << destM << "," << originalM << "," << serviceId << "," << moveCost << ",\"[";
 	for (int r = 0; r < getNumberOfResources(); r++) {
-		if (r > 0) *tracking_file_ << ",";
-		*tracking_file_ << p->getRequirement(r);
+		if (r > 0) *file << ",";
+		*file << p->getRequirement(r);
 	}
-	*tracking_file_ << "]\"," << fixed << setprecision(4) << ((double)costImprovement) << "," << current_timestamp << "," << solution_id_;
+	*file << "]\"," << fixed << setprecision(4) << ((double)costImprovement) << "," << current_timestamp << "," << solution_id_;
 	
 	// Source machine resource usage
-	*tracking_file_ << ",\"[";
+	*file << ",\"[";
 	if (oldMachine != 0) {
 		for (int r = 0; r < getNumberOfResources(); r++) {
-			if (r > 0) *tracking_file_ << ",";
-			*tracking_file_ << oldMachine->getMachineResource(r)->getUsage();
+			if (r > 0) *file << ",";
+			*file << oldMachine->getMachineResource(r)->getUsage();
 		}
 	}
-	*tracking_file_ << "]\"";
+	*file << "]\"";
 	
 	// Destination machine resource usage  
-	*tracking_file_ << ",\"[";
+	*file << ",\"[";
 	if (newMachine != 0) {
 		for (int r = 0; r < getNumberOfResources(); r++) {
-			if (r > 0) *tracking_file_ << ",";
-			*tracking_file_ << newMachine->getMachineResource(r)->getUsage();
+			if (r > 0) *file << ",";
+			*file << newMachine->getMachineResource(r)->getUsage();
 		}
 	}
-	*tracking_file_ << "]\"";
+	*file << "]\"";
 	
 	// Source machine capacities
-	*tracking_file_ << ",\"[";
+	*file << ",\"[";
 	if (oldMachine != 0) {
 		for (int r = 0; r < getNumberOfResources(); r++) {
-			if (r > 0) *tracking_file_ << ",";
-			*tracking_file_ << oldMachine->getMachineResource(r)->getCapacity();
+			if (r > 0) *file << ",";
+			*file << oldMachine->getMachineResource(r)->getCapacity();
 		}
 	}
-	*tracking_file_ << "]\"";
+	*file << "]\"";
 	
 	// Destination machine capacities
-	*tracking_file_ << ",\"[";
+	*file << ",\"[";
 	if (newMachine != 0) {
 		for (int r = 0; r < getNumberOfResources(); r++) {
-			if (r > 0) *tracking_file_ << ",";
-			*tracking_file_ << newMachine->getMachineResource(r)->getCapacity();
+			if (r > 0) *file << ",";
+			*file << newMachine->getMachineResource(r)->getCapacity();
 		}
 	}
-	*tracking_file_ << "]\"";
+	*file << "]\"";
 	
 	// Source machine transient usage  
-	*tracking_file_ << ",\"[";
+	*file << ",\"[";
 	if (oldMachine != 0) {
 		for (int r = 0; r < getNumberOfResources(); r++) {
-			if (r > 0) *tracking_file_ << ",";
-			*tracking_file_ << oldMachine->getMachineResource(r)->getTransientUsage();
+			if (r > 0) *file << ",";
+			*file << oldMachine->getMachineResource(r)->getTransientUsage();
 		}
 	}
-	*tracking_file_ << "]\"";
+	*file << "]\"";
 	
 	// Destination machine transient usage
-	*tracking_file_ << ",\"[";
+	*file << ",\"[";
 	if (newMachine != 0) {
 		for (int r = 0; r < getNumberOfResources(); r++) {
-			if (r > 0) *tracking_file_ << ",";
-			*tracking_file_ << newMachine->getMachineResource(r)->getTransientUsage();
+			if (r > 0) *file << ",";
+			*file << newMachine->getMachineResource(r)->getTransientUsage();
 		}
 	}
-	*tracking_file_ << "]\"";
+	*file << "]\"";
 	
 	// Source and destination machine process counts
 	int sourceProcessCount = (oldMachine != 0) ? oldMachine->getNumberOfProcesses() : 0;
 	int destProcessCount = (newMachine != 0) ? newMachine->getNumberOfProcesses() : 0;
 	
-	*tracking_file_ << "," << sourceProcessCount << "," << destProcessCount;
+	*file << "," << sourceProcessCount << "," << destProcessCount;
 	
 	// Current costs
-	*tracking_file_ << "," << getLoadCost() << "," << getBalanceCost() << "," << getCost() << endl;
-	
-	tracking_file_->flush();
+	*file << "," << getLoadCost() << "," << getBalanceCost() << "," << getCost() << endl;
 }
 
 void Solution::updateSolutionState() {
@@ -971,12 +1008,18 @@ void Solution::updateSolutionState() {
 }
 
 void Solution::closeTracker() {
-	if (tracking_file_) {
-		tracking_file_->close();
-		delete tracking_file_;
-		tracking_file_ = 0;
+	if (accepted_tracking_file_) {
+		accepted_tracking_file_->close();
+		delete accepted_tracking_file_;
+		accepted_tracking_file_ = 0;
+	}
+	if (exploration_tracking_file_) {
+		exploration_tracking_file_->close();
+		delete exploration_tracking_file_;
+		exploration_tracking_file_ = 0;
 	}
 	tracking_enabled_ = false;
+	exploration_tracking_enabled_ = false;
 }
 
 void Solution::enableAcceptedTransitionTracking() {
@@ -985,5 +1028,13 @@ void Solution::enableAcceptedTransitionTracking() {
 
 void Solution::disableAcceptedTransitionTracking() {
 	tracking_enabled_ = false;
+}
+
+void Solution::enableExplorationTracking() {
+	exploration_tracking_enabled_ = true;
+}
+
+void Solution::disableExplorationTracking() {
+	exploration_tracking_enabled_ = false;
 }
 
