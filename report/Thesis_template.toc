@@ -5,30 +5,29 @@
 \contentsline {chapter}{\numberline {2}Background}{5}{chapter.2}%
 \contentsline {section}{\numberline {2.1}Machine Reassignment Problem}{5}{section.2.1}%
 \contentsline {section}{\numberline {2.2}ROADEF/EURO 2012 Challenge - Google Machine Reassignment Problem}{6}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Problem Definition}{8}{section.2.3}%
+\contentsline {section}{\numberline {2.3}Problem Definition}{7}{section.2.3}%
 \contentsline {subsection}{\numberline {2.3.1}Decision Variables}{8}{subsection.2.3.1}%
 \contentsline {subsection}{\numberline {2.3.2}Constraints}{8}{subsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.3.3}Objectives}{10}{subsection.2.3.3}%
-\contentsline {section}{\numberline {2.4}Solution Components: Approaches, Exploration, and Search Mechanisms}{11}{section.2.4}%
+\contentsline {subsection}{\numberline {2.3.3}Objectives}{9}{subsection.2.3.3}%
+\contentsline {section}{\numberline {2.4}Algorithmic Approaches for Solving MRP}{10}{section.2.4}%
 \contentsline {subsection}{\numberline {2.4.1}Levels of Abstraction in Optimization Approaches}{11}{subsection.2.4.1}%
 \contentsline {subsection}{\numberline {2.4.2}Common Search Methods for tackling Optimization Problems}{12}{subsection.2.4.2}%
 \contentsline {subsubsection}{\numberline {2.4.2.1}Local Search}{12}{subsubsection.2.4.2.1}%
-\contentsline {subsubsection}{\numberline {2.4.2.2}Large Neighbourhood Search}{13}{subsubsection.2.4.2.2}%
-\contentsline {chapter}{\numberline {3}Related Work}{15}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Literature Research Objectives}{15}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Literature Research Method}{16}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Proposed algorithms for solving Google Machine Reassignment Problem}{16}{section.3.3}%
-\contentsline {section}{\numberline {3.4}Post-contest Contributions}{17}{section.3.4}%
-\contentsline {section}{\numberline {3.5}Summary of Findings, Common Patterns, and Insights}{17}{section.3.5}%
-\contentsline {chapter}{\numberline {4}Methodology}{19}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Dataset}{19}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Algorithms Selection for Analysis of Reassignments}{20}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Metrics for the analysis of reassignments}{23}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Tracking System Design}{24}{section.4.4}%
-\contentsline {section}{\numberline {4.5}Tracking System Implementation Challenges and Limitations}{25}{section.4.5}%
-\contentsline {chapter}{\numberline {5}Experimental Setup}{27}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Hardware specifications and system dependencies}{27}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Streamlined pipeline to run the algorithms}{28}{section.5.2}%
-\contentsline {chapter}{\numberline {6}Results}{29}{chapter.6}%
-\contentsline {chapter}{\numberline {7}Conclusion}{32}{chapter.7}%
-\contentsline {chapter}{References}{34}{chapter*.9}%
+\contentsline {subsubsection}{\numberline {2.4.2.2}Large Neighbourhood Search}{12}{subsubsection.2.4.2.2}%
+\contentsline {chapter}{\numberline {3}Related Work}{14}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Literature Research Objectives}{14}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Literature Research Method}{15}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Proposed algorithms for solving Google Machine Reassignment Problem}{15}{section.3.3}%
+\contentsline {chapter}{\numberline {4}Methodology}{17}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Dataset}{17}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Selection of Algorithms for Analysis of Reassignments}{18}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Metrics for the analysis of reassignments}{21}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Tracking System Design}{22}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Tracking System Implementation Challenges and Limitations}{23}{section.4.5}%
+\contentsline {chapter}{\numberline {5}Experimental Setup}{25}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Hardware specifications and system dependencies}{25}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Streamlined pipeline to run the algorithms}{26}{section.5.2}%
+\contentsline {chapter}{\numberline {6}Results}{27}{chapter.6}%
+\contentsline {chapter}{\numberline {7}Conclusion}{35}{chapter.7}%
+\contentsline {chapter}{References}{39}{chapter*.12}%
+\contentsline {chapter}{\numberline {A}Additional Results of HC-LNSHC Analysis}{40}{appendix.A}%

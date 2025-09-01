@@ -37,7 +37,7 @@
 \hyphenation{op-tical net-works semi-conduc-tor}
 \hyphenation{par-ti-cu-lar mo-du-le ge-stu-re}
 
-\title{\Large{Assignment Predictions for Machine Reassignment Problem}}
+\title{\Large{Analysis of Reassignments for solving the Machine Reassignment Problem}}
 \author{Piotr Bielski}
 \collegeordept{School of Computer Science}
 \university{University of Galway}
@@ -86,9 +86,9 @@ I, Piotr Bielski, hereby declare that this thesis, titled ``Solutions Analysis t
 \begin{abstracts}
 
 The reliance on cloud and high-performance computing platforms is becoming increasingly more widespread due to the rising demand for more computational resources across wide range of applications.
-However, the supporting infrastructure requires significant electrical power and negatively impacts the environment. Additionally, at such large scales, any inefficiencies in managing compute resources results in unnecessary and significant costs incurred by the compute providers or consumers.
-Therefore, to reduce environmental impact while at the same time reducing operational costs, the implementation of efficient resource management systems is essential. 
-This report aims to investigate challenges in efficiently managing compute resources, research into optimization algorithms, specifically solutions for solving the ROADEF/EURO 2012 Challenge (Machine Reassignment Problem), common techniques and reassignment patterns among best performing solutions, and synthesis of characteristics for the future development of optimal reassignment algorithms.
+However, the supporting infrastructure requires significant electrical power leading to negative impacts the environment. Additionally, at such large scales, inefficiencies in managing resources results in unnecessary and significant costs incurred by the compute providers and consumers.
+Therefore, to reduce the environmental impact and operational costs, the implementation of efficient resource management systems is essential. 
+This report aims to investigate challenges in efficiently managing compute resources, researches optimization algorithms, specifically solutions for solving the ROADEF/EURO 2012 Challenge (Machine Reassignment Problem), common techniques and reassignment patterns among best performing solutions, and analysis their reassignment patterns to provide insights into the development heuristics for building better optimization algorithms.
 \newline
 \newline
 \textbf{Keywords:} Machine Reassignment, Resource Management, Optimization, ROADEF, MRP
@@ -105,7 +105,7 @@ This report aims to investigate challenges in efficiently managing compute resou
 
 \chapter{Introduction}\label{chap:introduction}
 
-\textbf{(What) Topic:} High-performance computing and cloud platforms provide wide range of services in the form of Infrastructure-as-a-Service (IaaS), Platform-as-a-Service (PaaS), Data-as-a-Service (DaaS), which provide easy access to additional storage and compute resources. These services are in growing demand due to technological advancements in the recent years, resulting in
+High-performance computing and cloud platforms provide wide range of services in the form of Infrastructure-as-a-Service (IaaS), Platform-as-a-Service (PaaS), Data-as-a-Service (DaaS), which provide easy access to additional storage and compute resources. These services are in growing demand due to technological advancements in the recent years, resulting in
 explosion of resource-intensive scientific and industrial applications
 such as; artificial intelligence, SaaS enterprises, adoption of
 distributed systems across manufacturing and energy industries, as well
@@ -122,8 +122,7 @@ being on the rise,
 \cite{masanetRecalibratingGlobalData2020}
 and having a growing impact on the environment due to CO2 emissions. 
 \cite{beloglazovEnergyEfficientResource2010}
-
-\textbf{(Why) Motivation:} Resource management strategies are essential
+Resource management strategies are essential
 for efficient utilization of resources, which in turn reduce wastage of
 electrical power and operational costs. However, cloud providers are
 facing significant difficulties in keeping up with the rate of growing
@@ -136,8 +135,7 @@ Considerable strategies have already been explored to improve the resource manag
 efficiency, however, there is still much potential for further
 optimizations, and even small improvements can yield significant results
 at such scale. \cite{masanetRecalibratingGlobalData2020}
-
-\textbf{(How) Purpose:} In this context, Google presented a complex and
+In this context, Google presented a complex and
 large-scale machine reassignment problem (MRP) for the ROADEF/EURO
 contest in 2012 (https://www.roadef.org/challenge/2012/en/index.php)
 with the purpose of driving more efforts into research and innovation of
@@ -165,7 +163,6 @@ for development of better resource management optimization algorithms.
 
 \item RQ: Can insights into the reassignments be used to create a framework for guiding the design of heuristics towards better selection of processes for reassignments? i.e.~to leverage these patterns to create a set of heuristics/ rules to guide the reassignment process in a more efficient manner.
 
-\item RQ: Can the insights be used in the development of future machine reassignment optimization algorithms?
 \end{enumerate}
 
 
@@ -173,31 +170,35 @@ for development of better resource management optimization algorithms.
 \newpage
 \section{Report Structure}\label{report-structure}
 
-\textbf{Chapter 1: Introduction} lays out the foundation for the
+\begin{itemize}
+
+\item \textbf{Chapter 1: Introduction} lays out the foundation for the
 project, presenting the impact of growing reliance on compute resources,
 the challenges in efficiently managing these resources, and approaches
-in tacking the issue.
+in tackling the issue.
 
-\textbf{Chapter 2: Background} provides background information on the
+\item \textbf{Chapter 2: Background} provides background information on the
 ROADEF/EURO 2012 Challenge (Machine Reassignment Problem), the problem
 definition, and common algorithms used for tackling the optimization
 problem, including information on reassignment and search strategies.
 
-\textbf{Chapter 3: Related Works} discusses the research objectives in
+\item \textbf{Chapter 3: Related Works} discusses the research objectives in
 more detail, the research methods applied when searching for related
 works, and an analysis of proposed solutions.
 
-\textbf{Chapter 4: Methodology} presents the research design and
+\item \textbf{Chapter 4: Methodology} presents the research design and
 approach, specifically the required metrics for analyzing the evolution
 of solution over time, and the design of the tracking system to generate
 the dataset from reassignments.
 
-\textbf{Chapter 5: Experiments} contains all necessary steps to
-reproduce the experimental results.
+\item \textbf{Chapter 5: Experiments} contains all necessary steps to
+reproduce the experimental results, including the hardware specifications and system dependencies.
 
-\textbf{Chapter 6: Results} investigates the recorded reassignments,
+\item \textbf{Chapter 6: Results} investigates the recorded reassignments,
 evaluates reassignments among solutions, and identifies reassignment
 patterns.
+
+\end{itemize}
 
 
 
@@ -270,13 +271,6 @@ teams then moved to more realistic set of instances made available to
 them, called dataset ``B'', to allow for fine-tuning their algorithms
 and prepare for having their solutions run against the final, largest,
 and unknown dataset ``X''.
-
-\emph{Could modify above to mention the setup across all dataset
-instances was; given initial assignment of processes to machines, the
-algorithms run for period of 5 minutes, and upon completion, the output
-consisting of final process assignments would be passed through solution
-checker to compute to final solution cost, and then evaluated against
-results of other participants.}
 
 Overall, the GMRP contest created a competitive environment that
 resulted in a diverse array of novel state-of-the-art approaches and
@@ -390,7 +384,7 @@ multi-objective into single-objective optimization problem.
 
 
 
-\section{Solution Components: Approaches, Exploration, and Search Mechanisms}
+\section{Algorithmic Approaches for Solving MRP}
 
 At its core, reassignment is the fundamental action of changing the
 allocation of a process from one machine to another, and is also the
@@ -407,7 +401,7 @@ these define how the algorithm determines which subset of processes is
 selected in each iteration and how it explores the solution space
 through possible reassignments for the current subset of processes. This
 approach is the basis for two fundamental search paradigms used to
-tackle the MRP; local search and large neighborhood search.
+tackle the MRP; local search and large neighborhood search. \cite{pirlotGeneralLocalSearch1996}
 
 
 
@@ -460,7 +454,7 @@ whereas a \emph{Greedy strategy} generates neighboring solutions
 one-by-one and immediately accepts the first solution that shows
 improvement, even if marginal. The simplest form of a local search
 method is known as the \textbf{First-Improvement (Greedy) Hill Climber},
-and consists of an LS method using the Greedy search.
+and consists of an LS method using the Greedy search. \cite{voudourisGuidedLocalSearch2010}
 
 \subsubsection{Large Neighbourhood Search}
 
@@ -476,7 +470,7 @@ such as Constraint Programming (CP) or Mixed Integer Programming (MIP),
 to find the optimal reassignments for the current process subset. While
 these exact solver methods can guarantee optimal solutions, they come
 with the trade-off of being computationally expensive due to their
-exhaustiveness. \textbf{Variable Neighborhood Search (VNS)} is a
+exhaustiveness. \cite{pisingerLargeNeighborhoodSearch2019} \textbf{Variable Neighborhood Search (VNS)} is a
 sophisticated variation of LNS, which follows similar processes of
 Destroy and Repair phases but with the addition of a diversification
 strategy that expands the explored solution space by changing the type
@@ -484,32 +478,13 @@ and size of neighborhood during the search process, increasing the
 potential for finding a better solution and improved ability to escape
 local optima. VNS is also capable of applying intensification strategies
 to narrow down the search towards specific neighborhoods through the
-adjustment of subproblem selection by using smaller neighborhoods.
-
-\emph{(Not sure if the below are needed - inclusion depends on final
-word count)}
-
-\begin{itemize}
-\item
-  \textbf{Genetic Algorithms}: These algorithms mimic the process of
-  natural selection, using techniques such as mutation, crossover, and
-  selection to evolve solutions over generations.
-\item
-  \textbf{Simulated Annealing}: This technique is inspired by the
-  annealing process in metallurgy. It explores the solution space by
-  allowing occasional uphill moves to escape local optima, with a
-  probability that decreases over time.
-\item
-  \textbf{Tabu Search} method uses a local search procedure and
-  maintains a list of previously visited solutions (the ``tabu list'')
-  to avoid cycling back to them.
-\end{itemize}
+adjustment of subproblem selection by using smaller neighborhoods. \cite{hansenVariableNeighbourhoodSearch2010}
 
 
 
 \chapter{Related Work}\label{chap:rel_work}
 
-Related Work chapter provides an in-depth analysis of the approaches proposed for tackling the machine reassignment problem, discusses the underlying algorithms and their mechanisms for solution space exploration, search mechanisms, and other techniques implemented alongside the core algorithms. Additionally, commonalities among the solutions are synthesized to provide tabular breakdown categorized into the different components that make the overall solution.
+Related Work chapter provides an analysis of the approaches proposed for tackling the machine reassignment problem, briefly discusses the underlying algorithms and mechanisms, search mechanisms, and other domain-specific heuristics implemented alongside the core algorithms.
 
 
 
@@ -551,39 +526,10 @@ In second place came in team S38 using LNS as the base for the algorithm and CP 
 \cite{mehta2012}
 Team J12 placed in third place, and in the first place within the junior category, with an algorithm that switches between two metaheuristics; HC and MIP-LNS. The algorithm initializes with HC and keeps running it until hitting a local optima, then falls back on MIP-LNS, and returns to running HC again following this pattern until the end. 
 \cite{jaskowski2016}
-
-
-
-\section{Post-contest Contributions}
-
-Due to the overall success of the contest, new algorithms have been
+Systematic reviews \cite{canales2020} on all submitted approaches shows a large majority of the algorithms relying on local search techniques and metaheuristics.
+Additionally, due to the success of the contest, new algorithms have been
 proposed and evaluated using datasets from the GMRP problem for many
-years following the ROADEF 2012 contest.
-
-
-
-\section{Summary of Findings, Common Patterns, and Insights}
-
-The analysis of the proposed solutions for the MRP revealed a diverse
-range of approaches, each with its own strengths and weaknesses.
-Heuristic and metaheuristic methods were the most commonly used, likely
-due to their ability to provide good solutions within a reasonable
-timeframe. Exact methods, while less common, demonstrated the potential
-for achieving optimal solutions but were limited by computational
-constraints. Common patterns such as initial solution generation, focus
-on high-cost processes, iterative improvement, and the use of
-randomization were prevalent across many solutions. These patterns
-suggest that successful strategies often involve a combination of quick
-initial assessments followed by more thorough exploration of the
-solution space.
-
-The common characteristics and techniques among the investigated
-solutions are: - Use of \emph{heuristics for subproblem selection} with
-prioritization based on: (S41) Process Size, (S38) Machine Cost, (J12)
-Potential Cost Reduction (Load \& Balance), (J12) Potential Objective
-Cost Reduction - Incorporation of \emph{randomness}: (S41) Noising of
-the objective function, (S38) Random machines in the subproblem
-selection, (J12)
+years following the ROADEF 2012 contest, including techniques such as capable of outperforming all of the submitted algorithms in the contest. \cite{turky2018}
 
 
 
@@ -616,23 +562,29 @@ Overview of datasets and the specific variables of the two relevant dataset A in
         Balance        & \([0, 1]\)        & \([0, 1]\)        & 1  & 1    \\ 
     \end{tabular}
     \caption{Example dataset characteristics}
+    \label{tab:dataset-characteristics}
 \end{table}
 
+Table~\ref{tab:dataset-characteristics} provides an overview of the dataset characteristics used in the analysis, where "[100, 1000]" defines a range of possible values for instances within the dataset, e.g. minium of 100 and maximum of 1000.
 
-
-\section{Algorithms Selection for Analysis of Reassignments}
+\section{Selection of Algorithms for Analysis of Reassignments}
 
 For an in-depth analysis into the algorithms and their reassignments
 throughout the optimization process, the three best performing,
-state-of-the-art algorithms are selected, namely: - VNS proposed by team
-S41, - CP-LNS proposed by team S38, - HC-(MIP-LNS)-HC proposed by team
-J12
+state-of-the-art algorithms are selected, namely: 
+
+
+\begin{itemize} \setlength\itemsep{0em} \setlength\parskip{0pt} \setlength\parsep{0pt}
+    \item VNS proposed by team S41
+    \item CP-LNS proposed by team S38
+    \item HC-(MIP-LNS)-HC proposed by team J12
+\end{itemize}
 
 VNS-based approach incorporates two specialized move operators, along
 side the two basic operators, used for the exploration of the
-neighborhood; - \texttt{Chain} involves triggering a sequence of
+neighborhood; \texttt{Chain} involves triggering a sequence of
 interdependent reassignments, such as cyclic exchanges, with the purpose
-of further expanding the exploration space - \texttt{BPR} (Big Process
+of further expanding the exploration space \texttt{BPR} (Big Process
 Reassignment) specifically targets the reassignment of large processes
 by removing multiple of processes at once, as these are generally the
 hardest to reallocate, and improves the efficiency of the other three
@@ -684,8 +636,8 @@ large processes.
 Even though MIP solver was observed to provide suboptimal performance on
 larger instances based on investigations of the previous approach, the
 HC-LNSHC algorithm is capable of delivering solid performance with the
-MIP solver due to its architectural design consisting of two
-metaheuristics working together; (1) Local Search with Greedy search,
+MIP solver due to its architectural hybrid design consisting of a heuristic and a
+metaheuristic working together; (1) Local Search with Greedy search,
 i.e.~First-improvement Hill Climber (FI-HC), and (2) LNS using MIP for
 subproblem optimization. Rather than relying on the computationally
 expensive exact solvers on each iteration, the algorithm instead
@@ -714,10 +666,7 @@ MIP on larger instances is also resulting in similar performance hits
 when ran that were observed in previous approach, but the FI-HC could be
 minimizing the impact through its efficient and fast iterations.
 
-Overall, all three algorithms incorporate some level of domain-specific
-heuristics that provide significant performance gains well above
-original capabilities.
-
+This in-depth analysis of the algorithms provides valuable information on the state-of-the-art algorithms, whose performance competed against over 80 other participants during the ROADEF 2012 contest, and emerged as the top three best performing optimization algorithms. Key insights help to address RQ1, seeking to answer on the best performing algorithms and their characteristics, which include all three algorithms having incorporated some level of domain-specific heuristics that provide significant performance gains well above original capabilities at various layer such as; subproblem selection and optimization. Also, the incorporation of randomness is common to allow the search espace from getting trapped in a local optima.
 
 
 \section{Metrics for the analysis of reassignments}
@@ -728,7 +677,7 @@ system into the algorithms to generate the dataset on reassignments. The
 metrics tracked for each reassignment should provide sufficient
 information for the analysis and include:
 
-\begin{itemize}
+\begin{itemize} \setlength\itemsep{0em} \setlength\parskip{0pt} \setlength\parsep{0pt}
 \item
   \textbf{Process ID}: Serves as the primary ID to identify the process
   that is being reassigned at the current step
@@ -795,10 +744,8 @@ Source code for the original algorithms was found at:
     \item J12 (HC-LNSHC): https://bitbucket.org/wjaskowski/roadef-challange-2012-public
 \end{itemize}
 
-The modified codebases to track reassignments are available under one
-repository:
-
-- Link: https://github.com/yourusername/reassignment-tracking
+The modified codebases to track reassignments along with the analysis are available under one
+repository: https://github.com/circleorange/mrp-approach-analysis
 
 
 
@@ -813,9 +760,9 @@ only the latest version is available for download, which resulted in the
 requirement for updating the dependency to CPLEX v22.1.1, and along with
 it multiple additional changes to the codebase as the change new CPLEX
 version is not backwards compatible. Major challenges were encountered
-in the following codebases of CP-LNS and VNS algorithms, primarily due
+in the following two codebases of CP-LNS and VNS algorithms, primarily due
 to all algorithms being implemented in different programming languages
-(Java, C, C++), preventing the ability of reusing code for tracking
+(Java, C, C++), preventing the reusability of code for tracking
 assignments and instead requiring individual implementations each time.
 Additionally, the CP-LNS algorithm is implemented in a way that makes
 retrieving much of the reassignment metrics not possible - such as the
@@ -823,8 +770,8 @@ process size which in the end required post processing steps on the
 captured reassignments to populate the column using dataset generated by
 one of the other algorithms, since all algorithms were ran using the
 same instance. Secondly, the approaches are lacking the concept of
-``Solution ID'' and this metric was not feasible to be tracked, as well
-as it performing both the explored and accepted reassignments in single
+``Solution ID'' and was not feasible to be tracked, as well
+as performing both the neighborhood exploration and accepted reassignments in single
 \texttt{for} loop, making the tracking of actual reassignments very
 difficult. Unfortunately the inclusion of explored reassignments during
 neighborhood exploration is not feasible as it generates a reassignments
@@ -868,7 +815,7 @@ the execution of investigated algorithms:
 
 VS Code was used in both the implementation and analysis stages of the project as it provides support for all necessary tools and technologies used through the investigation.
 
-During the implementation stage, a more streamlined pipeline was developed for testing and running the algorithms with the use of "Run Tasks" feature provided in VS Code. The feature allows to define set of configurations in a \texttt{tasks.json} file such as the commands to build and run the algorithms, as well as to pass in any additional arguments. These tasks resulted in significant improvement in convenience throughout the investigation as not the algorithms are all implemented in different programming languages, and hence require different commands to run, but also multiple arguments need to be passed into the program including; path to initial assignments dataset, path to file containing data on the problem variables (constraints), output file, and other project specific arguments. With the current pipeline, any algorithm can be executed by simply opening the Command Palette in VS Code Run Tasks \textgreater{} and selecting the specific task to execute, e.g. "HC-LNSHC: Run Full Duration Analysis (a1\_4, 300s)" or "HC-LNSHC: Test Run (a1\_1, 10s)" to either run the algorithm for the full 5 minute duration or a quick test run for 10 seconds on a different, easier dataset that allow for faster development iteration cycles throughout the implementation and testing of the changes for tracking reassignments.
+During the implementation stage, a more streamlined pipeline was developed for testing and running the algorithms with the use of "Run Tasks" feature provided in VS Code. The feature allows to define set of configurations in a \texttt{tasks.json} file such as the commands to build and run the algorithms, as well as to pass in any additional arguments. These tasks resulted in significant improvement in convenience throughout the investigation as the algorithms are implemented in different programming languages, and hence require different commands to run, but also multiple arguments need to be passed into the program including; path to initial assignments dataset, path to file containing data on the problem variables (constraints), output file, and other project specific arguments. With the current pipeline, any algorithm can be executed by simply opening the Command Palette in VS Code > Run Tasks and selecting the specific task to execute, e.g. "HC-LNSHC: Run Full Duration Analysis (a1\_4, 300s)" or "HC-LNSHC: Test Run (a1\_1, 10s)" to either run the algorithm for the full 5 minute duration or a quick test run for 10 seconds on a different, easier dataset that allow for faster development iteration cycles throughout the implementation and testing of the changes for tracking reassignments.
 
 
 
@@ -881,14 +828,20 @@ This chapter presents the results of the experimental runs conducted to evaluate
 \begin{table}[h]
     \centering
     \begin{tabular}{l|c|c|c}
-        Variable & VNS & CP-LNS & HC-LNSHC \\ 
+        & VNS & CP-LNS & HC-LNSHC \\ 
         \hline
-        #Reassignments      & \([100, 1000]\)   & \([5000, 50000]\) & 4  & 50   \\ 
-        Unique Processes       & \([4, 100]\)      & \([100, 5000]\)   & 50 & 1000 \\ 
-        #Neighbourhoods      & \([2, 12]\)       & \([3, 12]\)       & 2  & 3    \\
+        \# Reassignments & 4344 & 25440 & 330 \\ 
+        Avg. Process Size Moves & 212k & 37k & 268k \\ 
+        \# Big Process Moves & 45 & 9 & 4k \\ 
+        \# Neighbourhoods & 8 & 6130 & 330 \\
+        Avg. Moves/Neighborhood & 543.0 & 4.15 & 1.0 \\
+
     \end{tabular}
-    \caption{Summarised characteristics of reassignments of the three algorithms.}
+    \caption{Optimization characteristics of reassignments.}
+    \label{tab:reassignment_summary}
 \end{table}
+
+Table~\ref{tab:reassignment_summary} provides an overview of the optimization characteristics of reassignments, where `\# Reassignments` is the total reassignments count made by each algorithm to reach their final solution, `Avg. Process Size` represents the average size of the processes involved in the reassignments, `\# Big Process Moves` counts the significant moves made during the reassignments (threshold to qualify process as BPR is based on an arbitrary threshold of 2e6 used in the analysis to provide common ground for comparison as otherwise it would very across algorithms), `\# Neighbourhoods` shows the number of neighborhoods traversed from the initial state of assignments to the final solution, and `Avg. Moves/Neighborhood` provides the average number of moves per neighborhood.
 
 \begin{figure}[htbp]
   \centering
@@ -897,7 +850,7 @@ This chapter presents the results of the experimental runs conducted to evaluate
   \label{fig:hclns_reassignments}
 \end{figure}
 
-Presents the reassignments made by the HC-LNSHC algorithm during its execution on the dataset instances a1\_1 and a1\_4. The plots illustrate the number of reassignments over time, providing insights into the algorithm's behavior and performance.
+\ref{fig:hclns_reassignments} presents sizes of the processes that are being reassigned over time by the HC-LNSHC algorithm during its execution on the a1\_4 instance to provide insights into the optimization process of the underlying algorithm.
 
 \begin{figure}[htbp]
   \centering
@@ -906,7 +859,7 @@ Presents the reassignments made by the HC-LNSHC algorithm during its execution o
   \label{fig:vns_reassignments}
 \end{figure}
 
-Presents the reassignments made by the VNS algorithm during its execution on the dataset instances a1\_1 and a1\_4. The plots illustrate the number of reassignments over time, providing insights into the algorithm's behavior and performance.
+Similarly, Figure~\ref{fig:vns_reassignments} illustrates  the reassignments made by the VNS algorithm during its execution on the a1\_4 instance.
 
 \begin{figure}[htbp]
   \centering
@@ -915,24 +868,59 @@ Presents the reassignments made by the VNS algorithm during its execution on the
   \label{fig:cplns_reassignments}
 \end{figure}
 
-Presents the reassignments made by the CP-LNS algorithm during its execution on the dataset instances a1\_1 and a1\_4. The plots illustrate the number of reassignments over time, providing insights into the algorithm's behavior and performance.
+Lastly, the reassignments made by the CP-LNS algorithm during its execution on the a1\_4 instance are illustrated in Figure~\ref{fig:cplns_reassignments}.
+
+
+Based on the results of the reassignment, HC-LNSHC presents the clearest signs of patterns in the reassignment processes, Figure~\ref{fig:hclns_reassignments}. Specifically, the prioritization of large processes early, and as the optimization process evolves, it becomes more difficult to find suitable reassignments, leading to the gradual decrease in process size over iterations, until the algorithm reaches some critical threshold causing an immediate spike, and then continuing the same gradual downwards trend as previously, with each subsequent spike being less pronounced and shorter than the previous.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=135mm]{/home/pbiel/repos/mrp/analysis/images/hclns_objective_cost.png}
+  \caption{HC-LNSHC Algorithm - Objective Cost over Reassignments}
+  \label{fig:hclns_objective_cost}
+\end{figure}
+
+Further analysis into the objective cost over reassignments, Figure~\ref{fig:hclns_objective_cost}, reveals that each spike in process size corresponds to a spike in the improvement of the objective function, which aligns with the algorithmic design of the HC-LNSHC presented in \cite{jaskowski2016}, where the gradual improvements indicate the optimization of the first-improvement hill-climber, delivering small incremental improvements on each iteration, all the way until eventually getting stuck in a local optima.
+
+This would be the point at which the algorithm switches to MIP-LNS in order to trigger a larger reassignment process in an attempt to escape the local optima, thereby producing a larger improvement gain and resulting in the spikes caught by the tracked reassignment metrics.
+
+Interestingly, based on the results in Table~\ref{tab:reassignment_summary}, the HC-LNSHC algorithm was capable of producing a strong solution while having an average of only 1 reassignment between neighborhoods and 330 reassignments, as compared to 4344 reassignments by VNS and 25440 by CP-LNS, showcasing effectiveness and efficiency of the FI-HC and LNS combination in rapidly navigating the solution space without having to perform frequent exhaustive searches.
+
+Another insight from the HC-LNSHC analysis, by combining all the observations, is the relation between the reassignment of single larger process and a larger jump in improvement gains, supporting the idea of larger processes carrying more potential and slowly builds on the knowledge towards RQ3 for guiding the design of heuristics. So far, the findings suggest selection of the larger processes for reassignments, followed by selection of the next largest process in next iteration (which based on the reassignments appears to nearly always be smaller), and so on, until reaching a point where the algorithm is unable to find any further improvements with a process of size that is smaller than the previous.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=135mm]{/home/pbiel/repos/mrp/analysis/images/vns_objective_cost.png}
+  \caption{VNS Algorithm - Objective Cost over Reassignments}
+  \label{fig:vns_objective_cost}
+\end{figure}
+
+The other two algorithms, VNS and CP-LNS, do not exhibit the same level of correlation between process size and improvement gains or patterns in their reassignments. VNS, for instance, tends to make more frequent reassignments, including more frequent use of large processes, however it's intrinsic design, as illustrated in Figure~\ref{fig:vns_objective_cost}, obfuscates deeper analysis due to the mechanisms related to the changing of weights in the objective function causing the cost to significantly increase in regions corresponding to high activity in reassignments of large processes in Figure~\ref{fig:vns_reassignments}. The vertical dashed blue lines represent changes in the neighborhood and illustrates how the adjusted weights max out at the half-way point between two adjacent neighborhoods, from which the algorithm beings the optimization on the modified objective function leading to the eventual downtrend. Also, based on the reassignments of VNS, it does not provide any indications of prioritization towards larger processes. On the other hand, CP-LNS reassignments in Figure~\ref{fig:cplns_reassignments} do show the largest process movements at the very start of the optimization, and overall higher average process size in the earlier stages with occasional BPRs throughout the optimization lifecycle, indicating some level of prioritization towards larger processes.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=135mm]{/home/pbiel/repos/mrp/analysis/images/sizeDistributions.png}
+  \caption{Comparison of reassignment distribution vs. Process Sizes}
+  \label{fig:move_distributions}
+\end{figure}
+
+Figure~\ref{fig:move_distributions} compares the distribution of reassignments based on process size across algorithms, revealing that both VNS and CP-LNS tend to commit more frequent reassignments of larger processes compared to HC-LNSHC which has only single process reassignment of beyond 3e6 size and could indicate some missed potential for improvement for the HC-LNSHC algorithm. However, it is important to note that both VNS and CP-LNS algorithms reassign a significant number of small processes, which could be contributing to their overall performance and computational cost.
+Of the two, VNS performs considerably more BPRs than CP-LNS and not only that, it also presents a much more balanced distribution across the board for all process sizes and especially in the region of mid-sized processes (2e6 to 3e6), where both CP-LNS and HC-LNSHC algorithms are lacking in comparison and could be losing on a lot of potential gains. This ability to work with processes of any size could be attributed to the design of the VNS algorithm as compared to LNS-based designs, providing it with more flexibility in exploration, and may have been the factor a key factor in VNS's overall performance.
+
+Given the promising results of the HC-LNSHC algorithm the analysis extends to find more patterns to gain a more complete understanding of potential heuristics and build more on the knowledge towards RQ3. Having explored the reassignment patterns of downtrends and spike cycles, the next stage investigates the previously mentioned "critical threshold" point upon which the algorithm switches from HC to MIP-LNS. Figure~\ref{fig:hclns_improvementSegments} shows the investigation using the Improvement metric (Difference in Objective Cost across reassignments) to more closely align with the actual underlying heuristic used within the algorithm. The subplots present the reassignment regions in occurs the HC to LNS switch, and further segmentation of one of those regions into even small parts is shown in Figure~\ref{fig:hclns_linReg} that present an attempt to identify some characteristic that could be used as potential trigger threshold for insights into building heuristics, such as "if improvement over region X is less than Y, use LNS". However, no potential criteria was identified - and specifically the opposite was found in this case, where regions of lesser improvement did not result in the falllback of LNS, but instead following regions showing higher improvements while still under HC ended up triggering the algorithm to switch to LNS.
+
+Overall, this analysis provides a comprehensive review of the reassignments made by each algorithm, highlighting their respective optimization processes and the sizes of the processes being reassigned over time. Specifically, the HC-LNSHC by \cite{jaskowski2016} has shown to be especially useful for understanding the dynamics of process reassignments and providing some guidance on building heuristics, following the general idea of starting largest and incrementally selecting smaller processes over the iterations. It is unfortunate a characteristic was not identified for the switch point as that would enable the heuristic to have continuation into the next cycle. Additionally, the benefits of VNS were identified in the process size distribution over reassignments, where it was capable to extract potential improvement from regions of processes sizes that the other two algorithms were not.
 
 
 
 \chapter{Conclusion} \label{chap:conclusion}
 
+The primary of objectives of this reports to identify state-of-the-art optimization algorithms, implementation of a system to enable tracking of reassignments, as well as an analysis into the reassignments of best performing algorithms was achieved. Unfortunately, the heuristic to full complete RQ3 was not full achieved, however, the findings provide a solid foundation for future work to build upon.
 The main challenge with the available solutions stems from the lack of
-ability to evaluate based purely on their conceptual approaches and
-improved evaluation approach of the solutions would be the
-standardization of technologies and tools, such to provide even grounds
-for evaluation. This is due to the fact that an algorithm programmed in
-Java comes with the overhead of the JVM as well as of the garbage
-collector - whereas, the other two approaches programming in C and C++
-do not.
-
-
-
-
+ability to purely evaluate the approaches based on their design due to the lack of standardization in technologies and tools, that would provide even grounds for evaluation. This primarly comes from the fact all the algorithms are implemented in different programming languages such as Java, C++, and C. 
+The issues is that the JVM comes with an overhead as well as the garbage collector - whereas, the other two approaches had manually managed memory. This difference in technologies could have potentially significant impact on the end results, so it is hard to evaluate whether an approach is better from another in situations where a supoptimal algorithm could outperforms another purely because it was compiled to a native binary for the specific CPU architecture in runs on and is compared to algorithms executed from a virtual machine.
+However, the findings from this report provide valuable insights into the reassignment behavior of each algorithm, which can inform future research and development efforts.
+By understanding the specific characteristics of each approach, it may be possible to develop more effective strategies to target specific weakness points of the analyzed algorithms to produce a more balanced approach. Additionally, the identification of key patterns and trends in the reassignments can help guide the design of new heuristics better suited to address domain-specific challenges within the optimization process.
 
 
 
@@ -945,9 +933,24 @@ do not.
 
 
 %%% uncomment if Appendices needed
-%\appendix
-%\chapter{Appendix-A-Title} 
-%\label{chap:appendix_a}
+\appendix
+\chapter{Additional Results of HC-LNSHC Analysis} \label{chap:appendix_a}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=135mm]{/home/pbiel/repos/mrp/analysis/images/hclns_improvementSegments.png}
+  \caption{Improvement Segments of HC-LNSHC Algorithm}
+  \label{fig:hclns_improvementSegments}
+\end{figure}
+
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=135mm]{/home/pbiel/repos/mrp/analysis/images/hclns_linReg.png}
+  \caption{Linear Regression Analysis of HC-LNSHC Algorithm}
+  \label{fig:hclns_linReg}
+\end{figure}
+
 
 %\chapter{Appendix-B-Title} 
 %\label{chap:appendix_b}
