@@ -3,9 +3,10 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Example dataset characteristics\relax }}{18}{table.caption.4}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Overview of dataset characteristics and the relevant dataset A instances\relax }}{21}{table.caption.4}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {6.1}{\ignorespaces Optimization characteristics of reassignments.\relax }}{27}{table.caption.5}%
+\contentsline {table}{\numberline {7.1}{\ignorespaces Optimization characteristics of reassignments.\relax }}{31}{table.caption.5}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }

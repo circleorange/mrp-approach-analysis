@@ -5,13 +5,14 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces HC-LNSHC Algorithm Process Sizes of each Reassignment\relax }}{28}{figure.caption.6}%
-\contentsline {figure}{\numberline {6.2}{\ignorespaces VNS Algorithm Process Sizes of each Reassignment\relax }}{28}{figure.caption.7}%
-\contentsline {figure}{\numberline {6.3}{\ignorespaces CP-LNS Algorithm Process Sizes of each Reassignment\relax }}{29}{figure.caption.8}%
-\contentsline {figure}{\numberline {6.4}{\ignorespaces HC-LNSHC Algorithm - Objective Cost over Reassignments\relax }}{30}{figure.caption.9}%
-\contentsline {figure}{\numberline {6.5}{\ignorespaces VNS Algorithm - Objective Cost over Reassignments\relax }}{31}{figure.caption.10}%
-\contentsline {figure}{\numberline {6.6}{\ignorespaces Comparison of reassignment distribution vs. Process Sizes\relax }}{32}{figure.caption.11}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces HC-LNSHC Algorithm Process Sizes of each Reassignment\relax }}{32}{figure.caption.6}%
+\contentsline {figure}{\numberline {7.2}{\ignorespaces VNS Algorithm Process Sizes of each Reassignment\relax }}{32}{figure.caption.7}%
+\contentsline {figure}{\numberline {7.3}{\ignorespaces CP-LNS Algorithm Process Sizes of each Reassignment\relax }}{33}{figure.caption.8}%
+\contentsline {figure}{\numberline {7.4}{\ignorespaces HC-LNSHC Algorithm - Objective Cost over Reassignments\relax }}{34}{figure.caption.9}%
+\contentsline {figure}{\numberline {7.5}{\ignorespaces VNS Algorithm - Objective Cost over Reassignments\relax }}{35}{figure.caption.10}%
+\contentsline {figure}{\numberline {7.6}{\ignorespaces Comparison of reassignment distribution vs. Process Sizes\relax }}{36}{figure.caption.11}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {A.1}{\ignorespaces Improvement Segments of HC-LNSHC Algorithm\relax }}{41}{figure.caption.13}%
-\contentsline {figure}{\numberline {A.2}{\ignorespaces Linear Regression Analysis of HC-LNSHC Algorithm\relax }}{42}{figure.caption.14}%
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Improvement Segments of HC-LNSHC Algorithm\relax }}{46}{figure.caption.13}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces Linear Regression Analysis of HC-LNSHC Algorithm\relax }}{47}{figure.caption.14}%

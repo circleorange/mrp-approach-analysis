@@ -67,7 +67,7 @@
 \frontmatter
 	
 \textbf{DECLARATION} 
-I, Piotr Bielski, hereby declare that this thesis, titled ``Solutions Analysis to Machine Reassingnment Problem'', and the work presented in it are entirely my own except where explicitly stated otherwise in the text, and that this work has not been previously submitted, in part or whole, to any university or institution for any degree, diploma, or other qualification. 
+I, Piotr Bielski, hereby declare that this thesis, titled ``Analysis of Reassignments for solving the Machine Reassignment Problem'', and the work presented in it are entirely my own except where explicitly stated otherwise in the text, and that this work has not been previously submitted, in part or whole, to any university or institution for any degree, diploma, or other qualification. 
 \newline
     
 \begin{tabular}{@{}p{.5in}p{4in}@{}}
@@ -88,7 +88,7 @@ I, Piotr Bielski, hereby declare that this thesis, titled ``Solutions Analysis t
 The reliance on cloud and high-performance computing platforms is becoming increasingly more widespread due to the rising demand for more computational resources across wide range of applications.
 However, the supporting infrastructure requires significant electrical power leading to negative impacts the environment. Additionally, at such large scales, inefficiencies in managing resources results in unnecessary and significant costs incurred by the compute providers and consumers.
 Therefore, to reduce the environmental impact and operational costs, the implementation of efficient resource management systems is essential. 
-This report aims to investigate challenges in efficiently managing compute resources, researches optimization algorithms, specifically solutions for solving the ROADEF/EURO 2012 Challenge (Machine Reassignment Problem), common techniques and reassignment patterns among best performing solutions, and analysis their reassignment patterns to provide insights into the development heuristics for building better optimization algorithms.
+This report aims to investigate challenges in efficiently managing compute resources, researches optimization algorithms, specifically solutions for solving the ROADEF/EURO 2012 Challenge (Machine Reassignment Problem), common techniques and analysis the reassignments of best performing state-of-the-art solutions, and analysis their reassignment patterns to provide insights into the development heuristics for building better optimization algorithms.
 \newline
 \newline
 \textbf{Keywords:} Machine Reassignment, Resource Management, Optimization, ROADEF, MRP
@@ -155,17 +155,15 @@ for development of better resource management optimization algorithms.
 \newpage
 \section{Research Questions}
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item RQ: What are the state-of-the-art algorithms for tackling the machine reassignment problem and do they have any common characteristics?
+The research project is guided by the following research questions:
 
+\begin{enumerate}\def\labelenumi{\arabic{enumi}.}
+\item RQ: What are the state-of-the-art algorithms for solving the machine reassignment problem?
 \item RQ: What processes are reassigned by the top performing algorithms over the duration of the optimization process and are there any patterns in reassignments?
-
-\item RQ: Can insights into the reassignments be used to create a framework for guiding the design of heuristics towards better selection of processes for reassignments? i.e.~to leverage these patterns to create a set of heuristics/ rules to guide the reassignment process in a more efficient manner.
-
+\item RQ: Can insights into the reassignments be used to create a framework for guiding the design of heuristics towards better selection of processes for reassignments?
 \end{enumerate}
 
-
+These RQs guide the research process and should provide sufficient contextual background to understand the structure and approaches of optimization algorithms, as well as insights into whether there are any patterns that could be leveraged and guide the development of heuristics to guide the reassignment process in a more efficient manner.
 
 \newpage
 \section{Report Structure}\label{report-structure}
@@ -200,49 +198,21 @@ patterns.
 
 \end{itemize}
 
-
-
 \chapter{Background} \label{chap:background}
 
-The following sections provide background on the general topic and challenges in machine reassignment, an introduction to ROADEF/EURO annual contests, with expanded information on the specific machine reassignment problem contest from 2012, and a detailed problem definition.
-
-
+The following sections in this chapter provide background on the general topic and challenges of machine reassignment, an introduction to ROADEF/EURO annual contests, expanded details of the specific challenge presented in 2012 - the Google Machine Reassignment Problem ("GMRP"), description of the problem definition that defines the various components of the problem, and finally information on common algorithmic approaches for solving the MRP.
 
 \section{Machine Reassignment Problem}
 
-\textbf{Machine Reassignment Problem (MRP)} is a complex combinatorial
-optimization problem that involves the distribution of workload
-(processes) across a set of machines in a way to optimize the
-utilization of available resources on the machines, and is particularly
-relevant in dynamic environments, where workloads fluctuate and
-intelligent algorithms are needed to improve efficiency of the system.
+\textbf{Machine Reassignment Problem (MRP)} is a complex combinatorial optimization problem that involves the distribution of workload across a set of machines in a way to optimize the utilization of available resources on the machines, and is particularly relevant in dynamic environments, where workloads fluctuate and available resources also change over time, such as in cloud computing and HPC platforms. The fundamental action in MRP is the reassignment of processes from one machine to another with the goal of improving overall system performance and efficiency. 
 
-However, the major challenge stems from the complexity of the problem -
-which requires balancing many variables, of which values may change, as
-is the case in cloud computing where workloads are continuously received
-or completed resulting in the conditions always changing, and such, not
-only it is insufficient to run the optimization algorithm once to
-distribute the workload, but instead it is an on-going iterative process
-which involves constant evaluation of the system and potentially cycles
-of steps of reorganizing the processes across machines based on current
-workloads and available resources, but also given the significant number
-of variables necessary for consideration, e.g.~resources required by the
-process (RAM, CPU, DISK, etc.), available resources on each machine, the
-total capacity of each machine, or balancing load across machines - the
-MRP problem is defined as NP-hard. This classification implies that
-finding an optimal solution is computationally not feasible, especially
-for instances of realistic size and complexity, and hence often requires
-the use of heuristic and metaheuristic approaches to tackle these types
-of problems. Such approaches aim to find high-quality solutions in a
-reasonable timeframe, but with the trade-off of no guarantee for
-obtaining global optimality. \cite{wreford2024}
+However, simple resource management systems struggle to adapt to these changes effectively, and through controlled reassignments using intelligent algorithms are needed to improve efficiency of the system.
 
-
+However, the major challenge stems from the complexity of the problem - which requires balancing many variables, of which values may change, as is the case in cloud computing where workloads are continuously received or completed resulting in the conditions always changing, and such, not only it is insufficient to run the optimization algorithm once to distribute the workload, but instead it is an on-going iterative process which involves constant evaluation of the system and potentially cycles of steps of reorganizing the processes across machines based on current workloads and available resources, but also given the significant number of variables necessary for consideration, e.g.~resources required by the process (RAM, CPU, DISK, etc.), available resources on each machine, the total capacity of each machine, or balancing load across machines - the MRP problem is defined as NP-hard. This classification implies that finding an optimal solution is computationally not feasible, especially for instances of realistic size and complexity, and hence often requires the use of heuristic and metaheuristic approaches to tackle these types of problems. Such approaches aim to find high-quality solutions in a reasonable timeframe, but with the trade-off of no guarantee for obtaining global optimality. \cite{wreford2024}
 
 \section{ROADEF/EURO 2012 Challenge - Google Machine Reassignment Problem}
 
 The ROADEF/EURO contest is jointly organized by French Operational Research and Decision Aid Society (ROADEF) and Association of European Operational Research Society (EURO) and appears regularly since 1999. 
-\footnote[1]{https://www.roadef.org/challenge/2022/en/}
 
 The challenges are open to everyone and aim to promote innovation and
 collaboration between researchers. Generally, participants are split
@@ -280,110 +250,6 @@ efficacy of different algorithmic strategies and other explored
 domain-specific heuristics that pushed performance of the solutions even
 further beyond their original capabilities.
 
-
-
-\section{Problem Definition}
-
-GMRP \footnote[2]{https://roadef.org/challenge/2012/en/} is formulated
-through three primary components; decision variables, constraints, and
-objectives, each consisting for interacting entities. The fundamental
-goal of the problem is; given an initial assignment of processes to
-machines, to reassign the processes to optimize for the objective
-function while adhering to multitude of constraints.
-
-\subsection{Decision Variables}\label{decision-variables}
-
-The fundamental decision variables defined for the problem are;
-machines, processes, and the initial assignment, where: \emph{(Could
-improve this explanation)}
-
-\begin{itemize}
-\item 
-    \textbf{Machines} refers to set of available machines, \(\mathcal{M}\), used for the execution of processes, where each machine, \(\textit{m} \in \mathcal{M}\), has a set of pre-defined finite resources such as CPU, RAM, DISK.
-\item
-    \textbf{Processes} refers to set of processes, \(\mathcal{P}\), that are the fundamental units of work. Each process, \(\textit{p} \in \mathcal{P}\), has specific resource requirements (CPU, RAM, DISK) and consumes these resources off the host when assigned to a machine, \(\mathcal{M}(\textit{p}) = \textit{m}\).
-\item
-    \textbf{Initial Assignment} defines the initial mapping of processes to machines in a way that may not be optimal, but to satisfy constraint requirements. The initial assignments are denoted as \(\mathcal{M}_0(\textit{p})\).
-\end{itemize}
-
-
-
-\subsection{Constraints}\label{constraints}
-
-Constraints define a set of limitations to which a solution must adhere and reflect physical restrictions such as available compute resources, process conflicts, dependencies, or the migration of processes over distributed network. Through these boundaries, not only do the constraints define the feasible solution space but also act as an implicit driver for the reassignment process:
-
-\begin{itemize}
-\item
-  \textbf{Capacity Constraints}: A process cannot be assigned to a
-  machine if the machine does not have enough available resources,
-  \(\mathcal{R}\). The machine must have enough capacity of all
-  resources (CPU, RAM, DISK) to host the process. The capacity of
-  resource is defined as \(\mathcal{C} (\textit{m}, \textit{r})\).
-\item
-  \textbf{Conflict Constraints}: Defines that processes belonging to
-  same service must run on distinct machines to avoid conflicts, and
-  does not allow processes of the same service to run on the same
-  machine, where a service, \(\textit{s} \in \mathcal{S}\), consists of
-  processes.
-\item
-  \textbf{Spread Constraints}: Defines the minimum number of locations,
-  \emph{minSpread}, over which processes of a service must be
-  distributed, where \emph{location}, \(\textit{l} \in \mathcal{L}\),
-  consists of a set of machines.
-\item
-  \textbf{Dependency Constraints}: Services can have a dependency on
-  another service. In such cases, processes of the dependent service
-  must run in the neighbourhood of the other service processes. Here, a
-  neighbourhood is defined as a set of machines as well,
-  \(\textit{n} \in \mathcal{N}\).
-\item
-  \textbf{Transient Usage Constraints}: While a process is migrated from
-  one machine, \textit{m}, to another, \textit{m}', the resources
-  required by the process are temporarily consumed on both machines.
-  Eventually, once the migration is complete, the resources are freed
-  from the initial machine.
-\end{itemize}
-
-\subsection{Objectives}\label{objectives}
-
-Objectives are the variables used by algorithms for guiding the
-optimization process and defines incurred costs from certain actions,
-but also penalties for violating certain conditions:
-
-\begin{itemize}
-\item
-  \textbf{Load Cost} is incurred for over-utilizing machine resources
-  beyond predefined safety capacity threshold, and serves as penalty for
-  pushing machine usage beyond preferred operational load, even if still
-  within the absolute physical limits. Each machine defines a safety
-  capacity per resource, \(\mathcal{SC} (\textit{m}, \textit{r})\), over
-  which the penalty is incurred.
-\item
-  \textbf{Balance Cost} defines an objective to encourage maintaining a
-  balance between available resources across machines and incurs a
-  penalty for imbalances.
-\item
-  \textbf{Process Move Cost} accounts for the overhead of moving a
-  process from one machine to another and incurs a cost for each process
-  reassignment.
-\item
-  \textbf{Service Move Cost}: Designated to balance the number of moved
-  processes across different services. It is defined as maximum number
-  of moved processes for any single service.
-\item
-  \textbf{Machine Move Cost}: Cost of migrating any process to another
-  machines. The cost varies depending on specific source and destination
-  machines.
-\item
-  \textbf{Total Objective Cost}: Weighted sum of all individual costs.
-\end{itemize}
-
-In summary, the \textbf{Total Objective Cost} is an aggregation of
-individual cost components, and effectively transforms the problem from
-multi-objective into single-objective optimization problem.
-
-
-
 \section{Algorithmic Approaches for Solving MRP}
 
 At its core, reassignment is the fundamental action of changing the
@@ -402,8 +268,6 @@ selected in each iteration and how it explores the solution space
 through possible reassignments for the current subset of processes. This
 approach is the basis for two fundamental search paradigms used to
 tackle the MRP; local search and large neighborhood search. \cite{pirlotGeneralLocalSearch1996}
-
-
 
 \subsection{Levels of Abstraction in Optimization Approaches}
 
@@ -430,9 +294,7 @@ Algorithms are generally categorized based on their approaches \cite{wreford2024
   compared to the other approaches.
 \end{itemize}
 
-
-
-\subsection{Common Search Methods for tackling Optimization Problems}
+\subsection{Common Search Methods for solving Optimization Problems}
 
 
 \subsubsection{Local Search}
@@ -480,78 +342,142 @@ local optima. VNS is also capable of applying intensification strategies
 to narrow down the search towards specific neighborhoods through the
 adjustment of subproblem selection by using smaller neighborhoods. \cite{hansenVariableNeighbourhoodSearch2010}
 
-
-
 \chapter{Related Work}\label{chap:rel_work}
 
-Related Work chapter provides an analysis of the approaches proposed for tackling the machine reassignment problem, briefly discusses the underlying algorithms and mechanisms, search mechanisms, and other domain-specific heuristics implemented alongside the core algorithms.
-
-
+Related Work chapter provides an overview of the approaches proposed for solving the Google Machine Reassignment Problem, including their underlying core algorithms, search mechanisms, and heuristics, and lastly a systematic review of all submitted solutions for the ROADEF/EURO 2012 challenge.
 
 \section{Literature Research Objectives}
 
-The research objectives to be accomplished through literature review are
-to gain insights into the different approaches taken by the submitted
-solutions for the MRP, investigate whether they were known or novel
-techniques, whether the solutions prioritised specific actions over
-others, such as preference to initially migrate large processes over
-small processes, and whether any sort of randomization played crucial
-role in their success. Should common patterns be found, they could
-provide insights into the development of future strategies for the
-tackling the machine reassignment problem.
-
-
+Objectives for the literature review are guided by the research questions to provide an overview on the various state-of-the-art approaches submitted in the ROADEF/EURO 2012 challenge to solve the GMRP problem, novel problem-specific heuristics, and any other techniques to improve the performance of the algorithms. 
+The search also includes more recent works that have been published since the contest, which have used the GMRP datasets for benchmarking and evaluation of their proposed algorithms to investigate the evolution of the approaches over time.
+Additionally, the review of algorithmic approaches and their ranking in the contest serves as source of suitable candidate algorithms for selection into the analysis of their reassignments.
 
 \section{Literature Research Method}
 
 The literature research was performed primarily on Google Scholar, NUIG James Hardiman Library, and Scopus for documents containing keywords; "Machine Reassignment Problem", "Google Challenge 2012", "Resource Management", "ROADEF12", and "Resource Optimization".
 
-Abstract sections of the resulting documents from the search queries
-were scanned and selected for in-depth analysis depending on their
-relevance to the topic. The query was further narrowed down to include
-peer-reviewed papers in high-quality journals (Q1 and Q2) that were
-published from the year of the publishment of the Google Machine
-Reassignment Problem, 2012 and onwards. Furthermore, of the selected
-relevant papers, their references and citations were investigated to
-provide more informational background and potential implications on the
-research that followed.
-
-
+Abstract sections of the resulting documents from the search queries were scanned and selected for in-depth analysis depending on their relevance to the topic. The query was further narrowed down to include peer-reviewed papers in high-quality journals (Q1 and Q2) that were published from the year of the publishment of the Google Machine Reassignment Problem, 2012 and onwards. Furthermore, of the selected relevant papers, their references and citations were investigated to provide more informational background and potential implications on the research that followed.
+However, given the niche nature of the topic, the search criteria was more relaxed towards papers published by the participating teams of their own GMRP approaches.
 
 \section{Proposed algorithms for solving Google Machine Reassignment Problem}
 
-The best performing algorithm in the ROADEF/2012 GMRP contest was presented by team S41 consisting of a variable neighborhood search method including two specialized move operators, a technique for "random" noising of the objective function, and heuristics for process selection. 
+The best performing algorithm in the ROADEF/2012 GMRP contest was presented by team S41 consisting of a variable neighborhood search method including two specialized move operators, heuristics to prioritize load cost reduction during process selection, and a technique for "random" noising of the objective function to temporarily modify the original weighted sum, to move the search out of local optima.
 \cite{gavranovic2012} 
-In second place came in team S38 using LNS as the base for the algorithm and CP solver to compute the optimal reassignments in the context of the selected subset of processes, as well as heuristics for guiding the search and subproblem optimization. 
+In second place came in team S38 using an LNS-based algorithm and a CP exact solver to compute the optimal reassignments in the context of the selected subset of processes, as well as heuristics for guiding the search and subproblem optimization. 
 \cite{mehta2012}
-Team J12 placed in third place, and in the first place within the junior category, with an algorithm that switches between two metaheuristics; HC and MIP-LNS. The algorithm initializes with HC and keeps running it until hitting a local optima, then falls back on MIP-LNS, and returns to running HC again following this pattern until the end. 
+Team J12 placed in third place, and on the first place within the junior category, with an algorithm using a hybrid approach of switching between heuristic and metaheuristic; HC and MIP-LNS. The algorithm initializes with HC and keeps running it until hitting a local optima, falls back to MIP-LNS, and returns to running HC again.
 \cite{jaskowski2016}
-Systematic reviews \cite{canales2020} on all submitted approaches shows a large majority of the algorithms relying on local search techniques and metaheuristics.
-Additionally, due to the success of the contest, new algorithms have been
-proposed and evaluated using datasets from the GMRP problem for many
-years following the ROADEF 2012 contest, including techniques such as capable of outperforming all of the submitted algorithms in the contest. \cite{turky2018}
+In \cite{hoffmann2015}, a hyper-heuristic approach is proposed to allow the algorithm working with different neighborhoods and have the ability to select the most suitable heuristic, and is based on Simulated Annealing (SA) using two low-level heuristics `H0' and `H1', where H0 targets the exploration of larger neighborhoods and used as supporting heuristic for H1 in situations where the search is stagnating and current candidate solution is significantly worse.
+Iterated Local Search (ILS) was presented by team S27 \cite{lopes2015} for which both randomized perturbations to perform random shifts where evaluated against an integer programming exact solver (IP-ILS). The results demonstrated significant performance difference of the IP solver over randomized perturbations, and the final proposed algorithm used IP-ILS as the core component.
+A multi-start iterated local search is proposed in \cite{masson2013}, which repeatedly runs a local search algorithm from different initial solutions and only focuses the optimization process on load and balance costs. Neighborhood exploration is done using basic move operators; Shift and Swap, and two other additional specialized operators; (1) `Home Relocate' to randomly select a number of processes that are currently assigned to a machine different to their initial machine and reassigned back to their initial machine, (2) `K-Swap' randomly selects K pairs of machines and swaps random groups of processes between them.
+In \cite{gabay2016}, proposed an approach originally designed for solving the classical bin packing (BP) problem - the vector bin packing method. It's capabilities are expanded along with many diverse heuristics to efficiently tackle the GMRP problem.
 
+Later works, post the ROADEF 2012 contest, have introduced more sophisticated techniques as well as refined on the simpler approaches, such as presented in \cite{turky2017}. The approach consists of a simple local search using steepest descent strategy with basic move operators. Due to the parameter-free design of LS, it was used as the basis for the evaluation of a new heuristic that combines the existing neighborhoods, and then randomly selects one from the list to generate a neighborhood solution during the search process - resulting in better performance as compared to Shift, Swap, and BPR operators alone.
+
+Additionally, due to the success of the contest, new algorithms have been proposed and evaluated using datasets from the GMRP problem for many years following the ROADEF 2012 contest, including techniques such as capable of outperforming all of the submitted algorithms in the contest. \cite{turky2018}
+
+Systematic review of approaches \cite{canales2020} shows the overall performance rankings being predominantly dominated by VNS-, LNS-, and Ant-HH- based algorithms by providing sufficient flexibility in their designs to explore the solution space, and capable of escaping local optima. 
+Additionally, use of MIP exact solvers is more common over CP solver as shown in \cite{murat2016}, but with the CP solver based algorithms scoring higher.
+
+
+\chapter{Problem Definition}
+
+The problem definitions \footnote[2]{https://roadef.org/challenge/2012/en/} outlined in the following sections are fundamental in understanding the key concepts of GMRP which are at core of all optimization algorithms, and provides the necessary context later interpretation of results during the analysis of reassignments.
+These definitions are formulated through three interacting components; decision variables, constraints, and objectives - and collectively define the available information to the algorithms, set out boundaries on the feasible solution space that can be explored during the search process, as well as the objectives that act as implicit drivers for how the solution space is navigated through reassignments.
+Additionally, the definitions often serves as the basis and source of many domain-specific heuristics that are often implemented alongside the core algorithms to further improve their performance.
+
+\subsection{Decision Variables}\label{decision-variables}
+
+The decision variables represent the choices available to the algorithm, i.e. the main decision is to determine where each process "should" run and capture the reassignments. At any valid solution, each process is assigned to exactly one machine, which translates to the current assignment of processes to machines. 
+
+\begin{itemize}
+\item 
+    \textbf{Machines}, \(\mathcal{M}\), refers to set of machines used for the execution of processes, where each machine, \(\textit{m} \in \mathcal{M}\), has a set of predefined and finite amount of resources such as CPU, RAM, DISK.
+\item
+    \textbf{Processes}, \(\mathcal{P}\), refers to a set of processes which are the fundamental units of work. Each process, \(\textit{p} \in \mathcal{P}\), has specific resource requirements (CPU, RAM, DISK) and consumes these resources off the machine to which it is assigned, \(\mathcal{M}(\textit{p}) = \textit{m}\).
+
+\end{itemize}
+
+\subsection{Constraints}\label{constraints}
+
+Constraints define rules that set boundaries for the feasible solution space to which algorithms must adhere and thereby have an effect on possible assignments. 
+These constraints reflect real-world physical limitations such as available computational resources on servers, process conflicts and dependencies, load distribution mechanisms, and costly migration of processes over distributed networks. 
+
+\begin{itemize}
+\item
+  \textbf{Capacity Constraints}: A process cannot be assigned to a machine if the machine does not have enough available resources, \(\mathcal{R}\). The machine must have enough capacity of all resources (CPU, RAM, DISK) to host the process. The capacity of resource is defined as \(\mathcal{C} (\textit{m}, \textit{r})\).
+\item
+  \textbf{Conflict Constraints}: Defines that processes belonging to same service must run on distinct machines to avoid conflicts, and does not allow processes of the same service to run on the same machine, where a service, \(\textit{s} \in \mathcal{S}\), consists of processes.
+\item
+  \textbf{Spread Constraints}: Defines the minimum number of locations, \emph{minSpread}, over which processes of a service must be distributed, where \emph{location}, \(\textit{l} \in \mathcal{L}\), consists of a set of machines.
+\item
+  \textbf{Dependency Constraints}: Services can have a dependency on another service. In such cases, processes of the dependent service must run in the neighbourhood of the other service processes. Here, a neighbourhood is defined as a set of machines as well, \(\textit{n} \in \mathcal{N}\).
+\item
+  \textbf{Transient Usage Constraints}: While a process is migrated from
+  one machine, \textit{m}, to another, \textit{m}', the resources
+  required by the process are temporarily consumed on both machines.
+  Eventually, once the migration is complete, the resources are freed
+  from the initial machine.
+\end{itemize}
+
+\subsection{Objectives}\label{objectives}
+
+Objectives are the variables used by algorithms for guiding the optimization process and defines incurred costs from certain actions, but also penalties for violating certain conditions:
+
+\begin{itemize}
+\item
+  \textbf{Load Cost} is incurred for over-utilizing machine resources beyond predefined safety capacity threshold, and serves as penalty for pushing machine usage beyond preferred operational load, even if still within the absolute physical limits. Each machine defines a safety capacity per resource, \(\mathcal{SC} (\textit{m}, \textit{r})\), over which the penalty is incurred.
+\item
+  \textbf{Balance Cost} defines an objective to encourage maintaining a balance between available resources across machines and incurs a penalty for imbalances.
+\item
+  \textbf{Process Move Cost} accounts for the overhead of moving a process from one machine to another and incurs a cost for each process reassignment.
+\item
+  \textbf{Service Move Cost}: Designated to balance the number of moved processes across different services. It is defined as maximum number of moved processes for any single service.
+\item
+  \textbf{Machine Move Cost}: Cost of migrating any process to another machines. The cost varies depending on specific source and destination machines.
+\item
+  \textbf{Total Objective Cost}: Weighted sum of all individual costs.
+\end{itemize}
+
+In summary, the \textbf{Total Objective Cost} is an aggregation of individual cost components, and effectively transforms the problem from multi-objective into a single-objective optimization problem.
 
 
 \chapter{Methodology} \label{chap:methodology} 
 
+This chapter outlines the research design and approach for the analysis of reassignments, including the selection of datasets, algorithms, and metrics for tracking the evolution of solutions over time.
 
+\section{Overview of Design Process and Approach}
 
-\section{Dataset}
+The overall idea of the project is to analyse reassignments performed during the optimization process of state-of-the-art algorithms to analyse their behaviour and identify any patterns in the reassignments that could be used to guide the design of heuristics for better selection of processes for reassignment. 
 
-The datasets containing the initial process-machine assignments, as well as other variables described in the problem definition, are provided on the official ROADEF/EURO 2012 challenge page.
+Therefore, the initial set of requirements to perform the analysis includes:
 
-Only one dataset, A, is used for the analysis of reassignments as it contains a smaller set of instances, allowing the algorithms to complete more reassignments as compared to the more difficult datasets, B and X. Given the underlying logic for reassignments remains the same, it is assumed the reassignment behavior will also remain the stay, whilst at
-the same time a larger dataset that will be generated from tacking the reassignments is preferable.
+\begin{enumerate}\def\labelenumi{\arabic{enumi}.}
+\item Initial assignment dataset,
+\item Selection of algorithms for analysis,
+\item Dataset of Reassignments
+\end{enumerate}
 
-Overview of datasets and the specific variables of the two relevant dataset A instances are:
+The first two requirements focus on the initial setup and the steps in order to obtain the third step of having a dataset of reassignments, and are further expanded in the following sections.
+
+\section{Initial Dataset: Process-to-Machine Assignments}
+
+The initial dataset of process-to-machine assignments is available on the ROADEF/EURO 2012 challenge page, as well as a solution checker, and the official problem definition.
+
+As previously mentioned, the challenge consists of three datasets; A, B, and X, that vary in size and complexity, where dataset A is the smallest and simplest, dataset B is larger and more complex, and dataset X is the largest and most complex.
+Furthermore, each dataset consists of 10 instances of varying size and gradual increase in complexity - though still within the boundaries of the dataset characteristics.
+
+Only one dataset, A, is used for the analysis of reassignments as it contains a smaller set of instances, allowing the algorithms to complete more reassignments as compared to the larger and more complex datasets, B and X. 
+Given the underlying logic for reassignments remains the same, it is assumed the reassignment behavior should also remain the same, whilst at the same time generating a larger dataset of reassignments is preferable.
+
+Overview of datasets and the specific variables of the two relevant dataset A instances \footnote{https://roadef.org/challenge/2012/files/Roadef\%20-\%20results.pdf} are:
 
 \begin{table}[h]
     \centering
     \begin{tabular}{l|c|c|c|c}
         Variable & Dataset A & Datasets B and X & Instance a1\_1 & Instance a1\_4 \\ 
         \hline
-        Processes      & \([100, 1000]\)   & \([5000, 50000]\) & 4  & 50   \\ 
+        Processes      & \([100, 1000]\)   & \([5000, 50000]\) & 100  & 1000   \\ 
         Machines       & \([4, 100]\)      & \([100, 5000]\)   & 50 & 1000 \\ 
         Resources      & \([2, 12]\)       & \([3, 12]\)       & 2  & 3    \\
         Transient      & \([0, 4]\)        & \([0, 4]\)        & 0  & 1    \\ 
@@ -561,23 +487,24 @@ Overview of datasets and the specific variables of the two relevant dataset A in
         Dependencies   & \([0, 10]\)       & \([30, 70]\)      & 10 & 10   \\ 
         Balance        & \([0, 1]\)        & \([0, 1]\)        & 1  & 1    \\ 
     \end{tabular}
-    \caption{Example dataset characteristics}
+    \caption{Overview of dataset characteristics and the relevant dataset A instances}
     \label{tab:dataset-characteristics}
 \end{table}
 
-Table~\ref{tab:dataset-characteristics} provides an overview of the dataset characteristics used in the analysis, where "[100, 1000]" defines a range of possible values for instances within the dataset, e.g. minium of 100 and maximum of 1000.
+Table~\ref{tab:dataset-characteristics} provides an overview of the dataset characteristics in the contest and the two dataset A instances used in the analysis, where "[100, 1000]" defines a range of possible values for instances within the dataset, e.g. minium of 100 and maximum of 1000.
+
+Therefore, a11 and a14 instances used and used as the starting point for the initial assignments, as they represent the smallest and largest instances within dataset A, and should provide a good representation of the reassignment behavior across the entire dataset.
 
 \section{Selection of Algorithms for Analysis of Reassignments}
 
-For an in-depth analysis into the algorithms and their reassignments
-throughout the optimization process, the three best performing,
-state-of-the-art algorithms are selected, namely: 
+Given the prominence of VNS and LNS-based algorithms in the contest, as well as their continued use in later works, and overall strong performance - these are selected as the core algorithms for the analysis of reassignments.
 
+The best performing implementations of these algorithms based on GMRP results are selected for the analysis of reassignments, and include:
 
 \begin{itemize} \setlength\itemsep{0em} \setlength\parskip{0pt} \setlength\parsep{0pt}
-    \item VNS proposed by team S41
-    \item CP-LNS proposed by team S38
-    \item HC-(MIP-LNS)-HC proposed by team J12
+    \item VNS proposed by team S41 \cite{gavranovic2012}
+    \item CP-LNS proposed by team S38 \cite{mehta2012}
+    \item HC-(MIP-LNS)-HC proposed by team J12 \cite{jaskowski2016}
 \end{itemize}
 
 VNS-based approach incorporates two specialized move operators, along
@@ -666,16 +593,19 @@ MIP on larger instances is also resulting in similar performance hits
 when ran that were observed in previous approach, but the FI-HC could be
 minimizing the impact through its efficient and fast iterations.
 
-This in-depth analysis of the algorithms provides valuable information on the state-of-the-art algorithms, whose performance competed against over 80 other participants during the ROADEF 2012 contest, and emerged as the top three best performing optimization algorithms. Key insights help to address RQ1, seeking to answer on the best performing algorithms and their characteristics, which include all three algorithms having incorporated some level of domain-specific heuristics that provide significant performance gains well above original capabilities at various layer such as; subproblem selection and optimization. Also, the incorporation of randomness is common to allow the search espace from getting trapped in a local optima.
+This in-depth analysis of the algorithms provides valuable information on the state-of-the-art algorithms, whose performance competed against over 80 other participants during the ROADEF 2012 contest, and emerged as the top three best performing optimization algorithms. Key insights help to address RQ1, seeking to answer on the best performing algorithms and their characteristics - which includes all three algorithms having incorporated some level of domain-specific heuristics that provide significant performance gains well above original capabilities at various layer to guide the algorithm as it navigates the solution space. Also, the incorporation of randomness is common to allow the search espace from getting trapped in a local optima.
 
 
 \section{Metrics for the analysis of reassignments}
 
-No datasets of reassignments are generated by the existing algorithms
-and therefore requires the design and implementation of a tracking
-system into the algorithms to generate the dataset on reassignments. The
-metrics tracked for each reassignment should provide sufficient
-information for the analysis and include:
+Of the selected algorithms, none of them generate datasets of reassignments by default and therefore changes are required for tracking the reassignments.
+Therefore, this leads to two additional requirements: 
+\begin{enumerate}\def\labelenumi{\arabic{enumi}.}
+\item Design and pplanning of needed reassignment metrics
+\item Implementation of tracking into the algorithms to generate the dataset
+\end{enumerate}
+
+The tracked metric for each reassignment should provide sufficient information for the analysis and include:
 
 \begin{itemize} \setlength\itemsep{0em} \setlength\parskip{0pt} \setlength\parsep{0pt}
 \item
@@ -748,7 +678,6 @@ The modified codebases to track reassignments along with the analysis are availa
 repository: https://github.com/circleorange/mrp-approach-analysis
 
 
-
 \section{Tracking System Implementation Challenges and Limitations}
 
 The first codebase investigated was of the HC-LNS-HC algorithm,
@@ -783,9 +712,7 @@ a flag back and forth in an attempt to filter out exploration moves and
 only capture true reassignments.
 
 
-
 \chapter{Experimental Setup} \label{chap:experiments}
-
 
 \section{Hardware specifications and system dependencies}
 
@@ -809,16 +736,11 @@ the execution of investigated algorithms:
     \item Python 3.x
 \end{itemize}
 
-
-
 \section{Streamlined pipeline to run the algorithms}
 
 VS Code was used in both the implementation and analysis stages of the project as it provides support for all necessary tools and technologies used through the investigation.
 
 During the implementation stage, a more streamlined pipeline was developed for testing and running the algorithms with the use of "Run Tasks" feature provided in VS Code. The feature allows to define set of configurations in a \texttt{tasks.json} file such as the commands to build and run the algorithms, as well as to pass in any additional arguments. These tasks resulted in significant improvement in convenience throughout the investigation as the algorithms are implemented in different programming languages, and hence require different commands to run, but also multiple arguments need to be passed into the program including; path to initial assignments dataset, path to file containing data on the problem variables (constraints), output file, and other project specific arguments. With the current pipeline, any algorithm can be executed by simply opening the Command Palette in VS Code > Run Tasks and selecting the specific task to execute, e.g. "HC-LNSHC: Run Full Duration Analysis (a1\_4, 300s)" or "HC-LNSHC: Test Run (a1\_1, 10s)" to either run the algorithm for the full 5 minute duration or a quick test run for 10 seconds on a different, easier dataset that allow for faster development iteration cycles throughout the implementation and testing of the changes for tracking reassignments.
-
-
-
 
 
 \chapter{Results} \label{chap:results}
@@ -886,7 +808,7 @@ This would be the point at which the algorithm switches to MIP-LNS in order to t
 
 Interestingly, based on the results in Table~\ref{tab:reassignment_summary}, the HC-LNSHC algorithm was capable of producing a strong solution while having an average of only 1 reassignment between neighborhoods and 330 reassignments, as compared to 4344 reassignments by VNS and 25440 by CP-LNS, showcasing effectiveness and efficiency of the FI-HC and LNS combination in rapidly navigating the solution space without having to perform frequent exhaustive searches.
 
-Another insight from the HC-LNSHC analysis, by combining all the observations, is the relation between the reassignment of single larger process and a larger jump in improvement gains, supporting the idea of larger processes carrying more potential and slowly builds on the knowledge towards RQ3 for guiding the design of heuristics. So far, the findings suggest selection of the larger processes for reassignments, followed by selection of the next largest process in next iteration (which based on the reassignments appears to nearly always be smaller), and so on, until reaching a point where the algorithm is unable to find any further improvements with a process of size that is smaller than the previous.
+Another insight from the HC-LNSHC analysis, by combining all the observations, is the relation between the reassignment of single larger process and a larger jump in improvement gains, supporting the idea of larger processes carrying more potential and builds on the knowledge towards both RQ2 and RQ3 for potential deisgn of a heuristic to guide the search process based on these reassignment patterns. So far, the findings suggest selection of the larger processes for reassignments, followed by selection of the next largest process in next iteration (which based on the reassignments appears to nearly always be smaller), and so on, until reaching a point where the algorithm is unable to find any further improvements with a process of size that is smaller than the previous.
 
 \begin{figure}[htbp]
   \centering
@@ -912,7 +834,6 @@ Given the promising results of the HC-LNSHC algorithm the analysis extends to fi
 Overall, this analysis provides a comprehensive review of the reassignments made by each algorithm, highlighting their respective optimization processes and the sizes of the processes being reassigned over time. Specifically, the HC-LNSHC by \cite{jaskowski2016} has shown to be especially useful for understanding the dynamics of process reassignments and providing some guidance on building heuristics, following the general idea of starting largest and incrementally selecting smaller processes over the iterations. It is unfortunate a characteristic was not identified for the switch point as that would enable the heuristic to have continuation into the next cycle. Additionally, the benefits of VNS were identified in the process size distribution over reassignments, where it was capable to extract potential improvement from regions of processes sizes that the other two algorithms were not.
 
 
-
 \chapter{Conclusion} \label{chap:conclusion}
 
 The primary of objectives of this reports to identify state-of-the-art optimization algorithms, implementation of a system to enable tracking of reassignments, as well as an analysis into the reassignments of best performing algorithms was achieved. Unfortunately, the heuristic to full complete RQ3 was not full achieved, however, the findings provide a solid foundation for future work to build upon.
@@ -934,6 +855,8 @@ By understanding the specific characteristics of each approach, it may be possib
 
 %%% uncomment if Appendices needed
 \appendix
+
+
 \chapter{Additional Results of HC-LNSHC Analysis} \label{chap:appendix_a}
 
 \begin{figure}[htbp]

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2025.8.23)  1 SEP 2025 01:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2025.8.23)  5 SEP 2025 10:22
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -741,7 +741,7 @@ Package: ltcaption 2020/05/30 v1.4b longtable captions (AR)
 )
 Package caption Info: supertabular package is loaded.
 Package caption Info: End \AtBeginDocument code.
-<Figures/University_Of_Galway_Logo__Positive_Landscape.png, id=132, 1693.527pt x 640.3122pt>
+<Figures/University_Of_Galway_Logo__Positive_Landscape.png, id=136, 1693.527pt x 640.3122pt>
 File: Figures/University_Of_Galway_Logo__Positive_Landscape.png Graphic file (type png)
 <use Figures/University_Of_Galway_Logo__Positive_Landscape.png>
 Package pdftex.def Info: Figures/University_Of_Galway_Logo__Positive_Landscape.png  used on input line 57.
@@ -806,7 +806,7 @@ l.144
                    \relax 
 l.155 \newpage
                [2] [3]
-Overfull \hbox (50.9484pt too wide) in paragraph at lines 180--184
+Overfull \hbox (50.9484pt too wide) in paragraph at lines 178--182
 []\OT1/cmr/bx/n/12 Chapter 2: Back-ground \OT1/cmr/m/n/12 pro-vides back-ground in-for-ma-tion on the ROADEF/EURO
  []
 
@@ -815,128 +815,136 @@ Chapter 2.
 [5
 
 ] [6] [7]
-LaTeX Font Info:    Trying to load font information for U+eus on input line 302.
- (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/ueus.fd
-File: ueus.fd 2013/01/14 v3.01 Euler Script
-) [8] [9] [10]
-Overfull \hbox (5.33435pt too wide) in paragraph at lines 421--426
+Overfull \hbox (5.33435pt too wide) in paragraph at lines 285--290
 []\OT1/cmr/bx/n/12 Metaheuristic \OT1/cmr/m/n/12 ap-proaches are higher-level al-go-rith-mic frame-works de-signed
  []
 
-[11] [12] [13]
+[8] [9] [10]
 Chapter 3.
-[14
+[11
 
-] [15] [16]
+] [12] [13] [14]
 Chapter 4.
 
-Overfull \hbox (41.48177pt too wide) in paragraph at lines 542--543
-\OT1/cmr/m/n/12 vari-ables de-scribed in the prob-lem def-i-ni-tion, are pro-vided on the of-fi-cial ROADEF/EURO
+Package hyperref Warning: Difference (2) between bookmark levels is greater 
+(hyperref)                than one, level fixed on input line 389.
+
+[15
+
+]
+LaTeX Font Info:    Trying to load font information for U+eus on input line 395.
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/ueus.fd
+File: ueus.fd 2013/01/14 v3.01 Euler Script
+) [16] [17] [18]
+Chapter 5.
+[19
+
+]
+Overfull \hbox (40.89427pt too wide) in paragraph at lines 465--466
+\OT1/cmr/m/n/12 The ini-tial dataset of process-to-machine as-sign-ments is avail-able on the ROADEF/EURO
  []
 
 
-Overfull \hbox (14.5815pt too wide) in paragraph at lines 551--564
+Overfull \hbox (14.5815pt too wide) in paragraph at lines 477--490
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[17
-
-] [18] [19] [20] [21] [22]
-Overfull \hbox (5.06128pt too wide) in paragraph at lines 744--745
+[20] [21] [22] [23] [24] [25] [26]
+Overfull \hbox (5.06128pt too wide) in paragraph at lines 674--675
 []\OT1/cmr/m/n/12 J12 (HC-LNSHC): https://bitbucket.org/wjaskowski/roadef-challange-2012-
  []
 
 
-Overfull \hbox (4.95078pt too wide) in paragraph at lines 752--752
+Overfull \hbox (4.95078pt too wide) in paragraph at lines 681--681
 []\OT1/cmr/bx/n/17.28 Tracking Sys-tem Im-ple-men-ta-tion Chal-lenges
  []
 
-[23] [24]
-Chapter 5.
-[25
-
-] [26]
+[27] [28]
 Chapter 6.
-[27
+[29
+
+] [30]
+Chapter 7.
+[31
 
 ]
-</home/pbiel/repos/mrp/analysis/images/hclns_reassignments.png, id=400, 937.3419pt x 390.258pt>
+</home/pbiel/repos/mrp/analysis/images/hclns_reassignments.png, id=442, 937.3419pt x 390.258pt>
 File: /home/pbiel/repos/mrp/analysis/images/hclns_reassignments.png Graphic file (type png)
 <use /home/pbiel/repos/mrp/analysis/images/hclns_reassignments.png>
-Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/hclns_reassignments.png  used on input line 848.
+Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/hclns_reassignments.png  used on input line 770.
 (pdftex.def)             Requested size: 384.1122pt x 159.92343pt.
-</home/pbiel/repos/mrp/analysis/images/vns_reassignments.png, id=402, 937.3419pt x 390.258pt>
+</home/pbiel/repos/mrp/analysis/images/vns_reassignments.png, id=444, 937.3419pt x 390.258pt>
 File: /home/pbiel/repos/mrp/analysis/images/vns_reassignments.png Graphic file (type png)
 <use /home/pbiel/repos/mrp/analysis/images/vns_reassignments.png>
-Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/vns_reassignments.png  used on input line 857.
+Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/vns_reassignments.png  used on input line 779.
 (pdftex.def)             Requested size: 384.1122pt x 159.92343pt.
-</home/pbiel/repos/mrp/analysis/images/cplns_reassignments.png, id=404, 937.3419pt x 390.258pt>
+</home/pbiel/repos/mrp/analysis/images/cplns_reassignments.png, id=446, 937.3419pt x 390.258pt>
 File: /home/pbiel/repos/mrp/analysis/images/cplns_reassignments.png Graphic file (type png)
 <use /home/pbiel/repos/mrp/analysis/images/cplns_reassignments.png>
-Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/cplns_reassignments.png  used on input line 866.
+Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/cplns_reassignments.png  used on input line 788.
 (pdftex.def)             Requested size: 384.1122pt x 159.92343pt.
- [28 </home/pbiel/repos/mrp/analysis/images/hclns_reassignments.png> </home/pbiel/repos/mrp/analysis/images/vns_reassignments.png>]
-</home/pbiel/repos/mrp/analysis/images/hclns_objective_cost.png, id=413, 839.0547pt x 390.258pt>
+ [32 </home/pbiel/repos/mrp/analysis/images/hclns_reassignments.png> </home/pbiel/repos/mrp/analysis/images/vns_reassignments.png>]
+</home/pbiel/repos/mrp/analysis/images/hclns_objective_cost.png, id=455, 839.0547pt x 390.258pt>
 File: /home/pbiel/repos/mrp/analysis/images/hclns_objective_cost.png Graphic file (type png)
 <use /home/pbiel/repos/mrp/analysis/images/hclns_objective_cost.png>
-Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/hclns_objective_cost.png  used on input line 878.
+Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/hclns_objective_cost.png  used on input line 800.
 (pdftex.def)             Requested size: 384.1122pt x 178.6574pt.
- [29 </home/pbiel/repos/mrp/analysis/images/cplns_reassignments.png>]
-</home/pbiel/repos/mrp/analysis/images/vns_objective_cost.png, id=423, 833.2731pt x 390.258pt>
+ [33 </home/pbiel/repos/mrp/analysis/images/cplns_reassignments.png>]
+</home/pbiel/repos/mrp/analysis/images/vns_objective_cost.png, id=464, 833.2731pt x 390.258pt>
 File: /home/pbiel/repos/mrp/analysis/images/vns_objective_cost.png Graphic file (type png)
 <use /home/pbiel/repos/mrp/analysis/images/vns_objective_cost.png>
-Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/vns_objective_cost.png  used on input line 893.
+Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/vns_objective_cost.png  used on input line 815.
 (pdftex.def)             Requested size: 384.1122pt x 179.89601pt.
- [30 </home/pbiel/repos/mrp/analysis/images/hclns_objective_cost.png>]
-</home/pbiel/repos/mrp/analysis/images/sizeDistributions.png, id=432, 1003.8303pt x 641.0349pt>
+ [34 </home/pbiel/repos/mrp/analysis/images/hclns_objective_cost.png>]
+</home/pbiel/repos/mrp/analysis/images/sizeDistributions.png, id=473, 1003.8303pt x 641.0349pt>
 File: /home/pbiel/repos/mrp/analysis/images/sizeDistributions.png Graphic file (type png)
 <use /home/pbiel/repos/mrp/analysis/images/sizeDistributions.png>
-Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/sizeDistributions.png  used on input line 902.
+Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/sizeDistributions.png  used on input line 824.
 (pdftex.def)             Requested size: 384.1122pt x 245.28796pt.
- [31 </home/pbiel/repos/mrp/analysis/images/vns_objective_cost.png>] [32 </home/pbiel/repos/mrp/analysis/images/sizeDistributions.png>] [33] [34]
-Chapter 7.
-[35
+ [35 </home/pbiel/repos/mrp/analysis/images/vns_objective_cost.png>] [36 </home/pbiel/repos/mrp/analysis/images/sizeDistributions.png>] [37] [38]
+Chapter 8.
+[39
 
 ] (./Thesis_template.bbl (./Thesis_template.brf)
 \tf@brf=\write8
 \openout8 = `Thesis_template.brf'.
 
- [36] [37
+ [40] [41
 
-] [38]) [39]
+] [42] [43]) [44]
 Appendix A.
-</home/pbiel/repos/mrp/analysis/images/hclns_improvementSegments.png, id=498, 1003.8303pt x 1420.1055pt>
+</home/pbiel/repos/mrp/analysis/images/hclns_improvementSegments.png, id=553, 1003.8303pt x 1420.1055pt>
 File: /home/pbiel/repos/mrp/analysis/images/hclns_improvementSegments.png Graphic file (type png)
 <use /home/pbiel/repos/mrp/analysis/images/hclns_improvementSegments.png>
-Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/hclns_improvementSegments.png  used on input line 941.
+Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/hclns_improvementSegments.png  used on input line 864.
 (pdftex.def)             Requested size: 384.1122pt x 543.39445pt.
-</home/pbiel/repos/mrp/analysis/images/hclns_linReg.png, id=499, 1003.8303pt x 2553.2991pt>
+</home/pbiel/repos/mrp/analysis/images/hclns_linReg.png, id=554, 1003.8303pt x 2553.2991pt>
 File: /home/pbiel/repos/mrp/analysis/images/hclns_linReg.png Graphic file (type png)
 <use /home/pbiel/repos/mrp/analysis/images/hclns_linReg.png>
-Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/hclns_linReg.png  used on input line 949.
+Package pdftex.def Info: /home/pbiel/repos/mrp/analysis/images/hclns_linReg.png  used on input line 872.
 (pdftex.def)             Requested size: 384.1122pt x 977.00386pt.
 
-LaTeX Warning: Float too large for page by 408.54852pt on input line 952.
+LaTeX Warning: Float too large for page by 408.54852pt on input line 875.
 
-[40
+[45
 
-] [41 </home/pbiel/repos/mrp/analysis/images/hclns_improvementSegments.png>] [42 </home/pbiel/repos/mrp/analysis/images/hclns_linReg.png>] (./Thesis_template.aux)
+] [46 </home/pbiel/repos/mrp/analysis/images/hclns_improvementSegments.png>] [47 </home/pbiel/repos/mrp/analysis/images/hclns_linReg.png>] (./Thesis_template.aux)
 Package rerunfilecheck Info: File `Thesis_template.out' has not changed.
-(rerunfilecheck)             Checksum: 6E58343F6531D9B86DE8641841403B36;7060.
+(rerunfilecheck)             Checksum: 656FA9879AA192FFB8341153E14A3B25;7538.
 Package rerunfilecheck Info: File `Thesis_template.brf' has not changed.
-(rerunfilecheck)             Checksum: 489FA4640EE3EB3198F8EAF415A07410;1260.
+(rerunfilecheck)             Checksum: D5A1F0EEAC49D7A4A69588C66BEEE699;1685.
  ) 
 Here is how much of TeX's memory you used:
- 23104 strings out of 480171
- 406368 string characters out of 5894489
- 785214 words of memory out of 5000000
- 40498 multiletter control sequences out of 15000+600000
- 480228 words of font info for 70 fonts, out of 8000000 for 9000
+ 23156 strings out of 480171
+ 407057 string characters out of 5894489
+ 786592 words of memory out of 5000000
+ 40533 multiletter control sequences out of 15000+600000
+ 480828 words of font info for 73 fonts, out of 8000000 for 9000
  65 hyphenation exceptions out of 8191
- 125i,12n,120p,1469b,505s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 125i,12n,120p,1469b,508s stack positions out of 5000i,500n,10000p,200000b,80000s
 pdfTeX warning (dest): name{Hfootnote.3} has been referenced but does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist, replaced by a fixed one
@@ -944,10 +952,10 @@ pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist,
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
 
  </home/pbiel/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/euler/eusm10.pfb>
-Output written on Thesis_template.pdf (50 pages, 1303047 bytes).
+Output written on Thesis_template.pdf (55 pages, 1314340 bytes).
 PDF statistics:
- 597 PDF objects out of 1000 (max. 8388607)
- 499 compressed objects within 5 object streams
- 122 named destinations out of 1000 (max. 500000)
- 302 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 654 PDF objects out of 1000 (max. 8388607)
+ 550 compressed objects within 6 object streams
+ 138 named destinations out of 1000 (max. 500000)
+ 310 words of extra memory for PDF output out of 10000 (max. 10000000)
 
