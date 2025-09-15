@@ -1,8 +1,7 @@
 {
     "version": "2.0.0",
     "tasks": [
-        {
-            "label": "Build VNS Algorithm",
+        { "label": "VNS: Build",
             "type": "shell",
             "command": "make",
             "args": ["clean", "&&", "make"],
@@ -21,10 +20,9 @@
                 "group": "gavra"
             },
             "problemMatcher": ["$gcc"],
-            "detail": "Build the C++ S41 algorithm with tracking capabilities"
+            "detail": "Build the C++ S41 algorithm"
         },
-        {
-            "label": "VNS: Quick Test Run (a1_4, 10s)",
+        { "label": "VNS: Test Run (a1_4, 10s)",
             "type": "shell",
             "command": "./machineReassignment",
             "args": [
@@ -38,7 +36,7 @@
                 "cwd": "${workspaceFolder}/gavra/Releasegcc"
             },
             "group": "test",
-            "dependsOn": "Build VNS Algorithm",
+            "dependsOn": "VNS: Build",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -47,10 +45,9 @@
                 "group": "gavra"
             },
             "problemMatcher": [],
-            "detail": "Run VNS algorithm with a quick 10-second test"
+            "detail": "Run VNS algorithm for quick 10-seconds"
         },
-        {
-            "label": "VNS: Full Analysis Run (a1_4, 300s)",
+        { "label": "VNS: Full Run (a1_4, 300s)",
             "type": "shell",
             "command": "./run_analysis.sh",
             "args": ["a1_4", "300", "42"],
@@ -58,7 +55,7 @@
                 "cwd": "${workspaceFolder}/gavra"
             },
             "group": "test",
-            "dependsOn": "Build VNS Algorithm",
+            "dependsOn": "VNS: Build",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -67,10 +64,9 @@
                 "group": "gavra"
             },
             "problemMatcher": [],
-            "detail": "Run VNS algorithm analysis on dataset a1_4 for 5 minutes"
+            "detail": "Run VNS algorithm on dataset a1_4 for 5 minutes"
         },
-        {
-            "label": "HCLNS: Build JAR",
+        { "label": "HC-LNS: Build JAR",
             "type": "shell",
             "command": "ant",
             "args": ["jar"],
@@ -89,10 +85,9 @@
                 "group": "jask"
             },
             "problemMatcher": [],
-            "detail": "Build the Java J12 algorithm JAR file"
+            "detail": "Build J12 algorithm (HC-LNS) JAR file"
         },
-        {
-            "label": "JASK: Compile Only",
+        { "label": "HC-LNS: Compile Only",
             "type": "shell",
             "command": "ant",
             "args": ["compile"],
@@ -110,8 +105,7 @@
             "problemMatcher": [],
             "detail": "Compile Java sources without creating JAR"
         },
-        {
-            "label": "HCLNS: Full Analysis Run (a1_4, 300s)",
+        { "label": "HC-LNS: Full Run (a1_4, 300s)",
             "type": "shell",
             "command": "java",
             "args": [
@@ -136,7 +130,7 @@
                 }
             },
             "group": "test",
-            "dependsOn": "HCLNS: Build JAR",
+            "dependsOn": "HC-LNS: Build JAR",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -147,8 +141,7 @@
             "problemMatcher": [],
             "detail": "Run HC-LNSHC algorithm with CPLEX solver (5 minutes)"
         },
-        {
-            "label": "HCLNS: Quick Test Run",
+        { "label": "HC-LNS: Test Run (a1_1, 10s)",
             "type": "shell",
             "command": "java",
             "args": [
@@ -173,7 +166,7 @@
                 }
             },
             "group": "test",
-            "dependsOn": "HCLNS : Build JAR",
+            "dependsOn": "HC-LNS : Build JAR",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -182,10 +175,9 @@
                 "group": "jask"
             },
             "problemMatcher": [],
-            "detail": "Run HC-LNSHC algorithm with quick 30-second test"
+            "detail": "Test run HC-LNSHC algorithm for 10 seconds"
         },
-        {
-            "label": "HCLNS: Clean Build",
+        { "label": "HC-LNS: Clean Build",
             "type": "shell",
             "command": "ant",
             "args": ["clean"],
@@ -203,90 +195,7 @@
             "problemMatcher": [],
             "detail": "Clean Java build directory"
         },
-        {
-            "label": "Compare Algorithms (Both Quick Run)",
-            "type": "shell",
-            "command": "echo",
-            "args": ["Starting comparison between GAVRA S41 and JASK J12 algorithms..."],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "group": "test",
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "GAVRA: Quick Test Run",
-                "JASK: Quick Test Run"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared",
-                "group": "comparison"
-            },
-            "problemMatcher": [],
-            "detail": "Run both algorithms sequentially for comparison"
-        },
-        {
-            "label": "Analysis: Open Jupyter Notebook",
-            "type": "shell",
-            "command": "jupyter",
-            "args": ["notebook", "analysis.ipynb"],
-            "options": {
-                "cwd": "${workspaceFolder}/analysis"
-            },
-            "group": "test",
-            "isBackground": true,
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "group": "analysis"
-            },
-            "problemMatcher": [],
-            "detail": "Open Jupyter notebook for algorithm analysis"
-        },
-        {
-            "label": "Analysis: Python Quick Analysis",
-            "type": "shell",
-            "command": "python3",
-            "args": ["quick_analysis.py"],
-            "options": {
-                "cwd": "${workspaceFolder}/gavra"
-            },
-            "group": "test",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared",
-                "group": "analysis"
-            },
-            "problemMatcher": [],
-            "detail": "Run quick Python analysis on latest GAVRA results"
-        },
-        {
-            "label": "Analysis: Compare Tracking Files",
-            "type": "shell",
-            "command": "python3",
-            "args": ["compare_tracking.py"],
-            "options": {
-                "cwd": "${workspaceFolder}/gavra"
-            },
-            "group": "test",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared",
-                "group": "analysis"
-            },
-            "problemMatcher": [],
-            "detail": "Compare tracking patterns between GAVRA dual solutions"
-        },
-        {
-            "label": "CPLNS: Build Algorithm",
+        { "label": "CP-LNS: Build Algorithm",
             "type": "shell",
             "command": "make",
             "args": ["clean", "&&", "make", "roadef"],
@@ -305,10 +214,9 @@
                 "group": "mehta"
             },
             "problemMatcher": ["$gcc"],
-            "detail": "Build the C++ CP-LNS algorithm with accepted-solution tracking"
+            "detail": "Build CP-LNS algorithm (C language)"
         },
-        {
-            "label": "CPLNS: Quick Test Run",
+        { "label": "CP-LNS: Test Run (a1_1, 10s)",
             "type": "shell",
             "command": "./machineReassignment",
             "args": [
@@ -320,7 +228,7 @@
                 "cwd": "${workspaceFolder}/mehta/cblns"
             },
             "group": "test",
-            "dependsOn": "CPLNS: Build Algorithm",
+            "dependsOn": "CP-LNS: Build Algorithm",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -331,8 +239,7 @@
             "problemMatcher": [],
             "detail": "Run CP-LNS algorithm with a quick 10-second test"
         },
-        {
-            "label": "CPLNS: Full Analysis Run (a1_4, 300s)",
+        { "label": "CP-LNS: Full Run (a1_4, 300s)",
             "type": "shell",
             "command": "./machineReassignment",
             "args": [
@@ -344,7 +251,7 @@
                 "cwd": "${workspaceFolder}/mehta/cblns"
             },
             "group": "test",
-            "dependsOn": "CPLNS: Build Algorithm",
+            "dependsOn": "CP-LNS: Build Algorithm",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -353,10 +260,9 @@
                 "group": "mehta"
             },
             "problemMatcher": [],
-            "detail": "Run CP-LNS algorithm analysis on dataset a1_4 for 5 minutes"
+            "detail": "Run CP-LNS algorithm on dataset a1_4 for 5 minutes"
         },
-        {
-            "label": "Compare All Algorithms (Quick Run)",
+        { "label": "Test Run All Algorithms",
             "type": "shell",
             "command": "echo",
             "args": ["Starting comparison between GAVRA S41, JASK J12, and MEHTA CB-LNS algorithms..."],
@@ -366,9 +272,9 @@
             "group": "test",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "GAVRA: Quick Test Run",
-                "JASK: Quick Test Run",
-                "MEHTA: Quick Test Run"
+                "VNS: Test Run",
+                "HC-LNS: Test Run",
+                "CP-LNS: Test Run"
             ],
             "presentation": {
                 "echo": true,
@@ -378,7 +284,7 @@
                 "group": "comparison"
             },
             "problemMatcher": [],
-            "detail": "Run all three algorithms sequentially for comparison"
+            "detail": "Test run all three algorithms sequentially for comparison"
         }
     ]
 }
