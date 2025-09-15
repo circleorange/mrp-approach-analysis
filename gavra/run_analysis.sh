@@ -61,13 +61,3 @@ fi
 if [ -f "$OUTPUT_DIR/solution_${DATASET}.txt" ]; then
     echo "Solution saved to $OUTPUT_DIR/solution_${DATASET}.txt"
 fi
-
-echo ""
-echo "Analysis complete. Results saved to: $OUTPUT_DIR"
-echo ""
-echo "To analyze the results, run:"
-echo "  cd $OUTPUT_DIR"
-echo "  jupyter notebook ../analytics/analysis.ipynb"
-echo ""
-echo "Or copy the tracking files to analyze with existing tools:"
-echo "  cp $OUTPUT_DIR/process_reassignments_sol*.csv /home/pbiel/repos/mrp/jask/"
